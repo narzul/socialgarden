@@ -22,17 +22,7 @@ cd socialgarden/python
 
 The API uses geocoder in order to find the coordinates of the device, based on IP.
 ```
-git clone https://github.com/DenisCarriere/geocoder
-```
-Navigate to the geocoder folder and install package
-```
-cd geocoder
-python2.7 setup.py install
-```
-###### Note - if error, install with sudo
-
-```
-sudi python2.7 setup.py install
+pip2.7 install geocoder
 ```
 
 ## Use cases
@@ -52,7 +42,7 @@ The following test will open multiple terminal windows in order to demo their us
 
 
 ```
- bash API-test.sh 
+ ./TEST-API.sh
 ```
 
 
