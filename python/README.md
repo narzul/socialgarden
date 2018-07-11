@@ -22,10 +22,10 @@ python setup.py install
 ```
 
 ## Use cases
-When ever the social garden api client is used, it has to be imported as is standard for python programs.
-We have two basic usecases. send data and retrieve data. Futhermore all the data can be looked up via the socailgarden website.
+Whenever the social garden API client is used, it has to be imported as is standard for python programs.
+We have two basic usecases: send data and retrieve data. Futhermore all the data can be looked up via the socailgarden website (currently in beta): [Socialgarden website](http://159.65.116.139:3000/)
 
-If you run send-to-server-example.py and get-data-from-server-example.py at the same time, from two terminals, you see how the api should be used for communication between sensors and researchers. The sensor should be implemented as the send-to-server-example.py.
+If you run send-to-server-example.py and get-data-from-server-example.py at the same time, from two terminals, you see how the API should be used for communication between sensors and database. The sensor should be implemented as the send-to-server-example.py.
 
 When one wishes to work with the data, it can be done as in get-data-from-server-example.py.
 
@@ -34,7 +34,7 @@ When one wishes to work with the data, it can be done as in get-data-from-server
 ###### Now you should try the API!
 
 ## Test API
-The following test will open multiple terminal windows in order to demo the usages. 
+The following test will open multiple terminal windows in order to demo their usages. 
 
 
 ```
@@ -57,7 +57,7 @@ python  get-attributes-example.py
 ```
 
 ### Sending data to server
-Data can be send to the server as shown in the following example.
+Data can be send to the server as shown in the following example:
 
 ###### Example send-to-server-example.py
 ```
@@ -71,7 +71,7 @@ for x in range(0, 100):
 ```
 
 ### Retrieving data from server
-Data can be retrieved as in the following example
+Data can be retrieved as in the following example:
 
 
 ###### Example get-data-from-server-example.py
@@ -131,7 +131,7 @@ StreamName: myStream
 
 
 
-## Methods - TODO - be consistent in method naming - change doc to stream!
+## Methods
 All getters return data as JSON.
 ```
 getNewData(StreamName) - Get new data points, check every 0.5 sec.
@@ -147,7 +147,7 @@ deleteStream(StreamName) - Delete stream from database (Warning. this method wil
 ### Using website for basic analysis
 [Socialgarden website](http://159.65.116.139:3000/)
 
-######  @ - Thomas Charles Rohleder - Reallab - ITU
+######  @ - Thomas Charles Rohleder - REAL - ITU
 
 ### Refrences
 We are using [Skywind3000](https://github.com/skywind3000/terminal)'s python script to execute multiple terminal windows in our test
