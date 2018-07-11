@@ -1,0 +1,14 @@
+{
+  u 'DeviceName': u 'devices',
+  u 'Description':
+  u 'Beskrivelse',
+  u 'TimeStamp': u '2018-06-20 18:04:08.924477',
+  u '__v': 0, u 'Location': {
+    u 'Latitude': u '55.6667',
+    u 'Longitude': u '12.5833'
+  }, u 'updatedAt': u '2018-06-20T18:04:08.939Z', u '_id': u '5b2a97181832ed04c7a19640', u 'Sensor': [{
+    u '_id': u '5b2a97181832ed04c7a19641',
+    u 'Name': u 'light',
+    u 'Value': u '10'
+  }], u 'createdAt': u '2018-06-20T18:04:08.939Z'
+}

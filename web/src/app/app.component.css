@@ -1,0 +1,58 @@
+/* Header Section */
+
+header.app-header {
+  background-color: #fff;
+  padding: 0 16px;
+  box-sizing: border-box;
+  height:200px;
+  border-bottom: 2px solid black;
+}
+
+header.app-header .real-logo  {
+  margin: 23px 0 27px 0;
+  mix-blend-mode: multiply;
+  float: right;
+}
+header.app-header .search-form {
+  float: left;
+}
+tr{
+  background-color: red;
+}
+header.app-header .search-field {
+  height: 36px;
+  margin: 18px 0;
+  padding: 0 18px;
+  width: 220px;
+  border-radius: 18px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.2);
+  color: black;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+}
+
+header.app-header .search-field::placeholder {
+  color: darkgray;
+}
+h1,h2,h3,p{
+  font-family: 'Raleway', sans-serif;
+}
+nav{
+  text-align: center;
+}
+h1{
+  display: inline-block;
+  font-size: 32px;
+  font-weight: bolder;
+  text-align: center;
+}
+.add-stream-btn{
+  background-color: green;
+  padding: 10px;
+  text-align: center;
+  width: 100px;
+  margin:5px auto;
+  color: white;
+}

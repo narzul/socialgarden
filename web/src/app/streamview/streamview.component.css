@@ -1,0 +1,36 @@
+li{
+  list-style: none;
+}
+select{
+  margin: 10px;
+  padding: 10px;
+}
+span{
+  display: block;
+  font-weight: bold;
+  margin: auto;
+  width:300px;
+}
+agm-map {
+  height: 300px;
+  width: 100%;
+}
+table{
+  width: 100%;
+  text-align: center;
+}
+.container{
+  max-width: 800px;
+  margin: auto;
+}
+.info{
+  border-bottom: solid 2px black;
+  display: inline-block;
+  width:100%;
+}
+.stream-info{
+  width:50%;
+  display: inline-block;
+  float: left;
+  height:300px;
+}
