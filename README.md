@@ -3,14 +3,14 @@ This repository contains a web service and a python API to interact with the ser
 
 Description of subsection:
 
-* [Webservice repository](https://github.itu.dk/tcha/real-live/tree/master/web)
-* [Socialgarden python API repository](https://github.itu.dk/tcha/real-live/tree/master/python)
+* [Webservice repository](https://github.com/RohlederCPH/socialgarden/tree/master/web)
+* [Socialgarden python API repository](https://github.com/RohlederCPH/socialgarden/tree/master/python)
 
 
 ## Webserver info
 * [Current webserver http://159.65.116.139:3000](http://159.65.116.139:3000)
 * [Query all devices http://159.65.116.139:3000/devices](http://159.65.116.139:3000/devices)
-* [Look up on name http://159.65.116.139:3000/devices/mystream](http://159.65.116.139:3000/devices/mystream)
+* [Look up on name http://159.65.116.139:3000/devices/mystream](http://159.65.116.139:3000/devices/mystream3)
 
 The interaction between client and database through mongoose.js and express.js.
 
