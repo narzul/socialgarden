@@ -18,7 +18,7 @@ git clone https://github.com/DenisCarriere/geocoder
 Navigate to the geocoder folder and install package
 ```
 cd geocoder
-python setup.py install
+python2.7 setup.py install
 ```
 
 ## Use cases
@@ -45,15 +45,15 @@ The following test will open multiple terminal windows in order to demo their us
 ## Individual parts of the test
 in terminal 1 
 ```
-python send-to-serve-example.py
+python2.7 send-to-serve-example.py
 ```
 in terminal 2 
 ```
-python get-data-from-server-example.py
+python2.7 get-data-from-server-example.py
 ```
 in terminal 3
 ```
-python  get-attributes-example.py
+python2.7  get-attributes-example.py
 ```
 
 ### Sending data to server
