@@ -8,9 +8,18 @@ The API, has been setup to send REST CRUD (Create, Read, Update and Delete) oper
 This package can be imported into any other python package by downloading the package to the same folder.
 
 
-
-
 ## Installation guide
+
+In order to use the API, clone the root repository via terminal or github UI.
+```
+git clone https://github.com/RohlederCPH/socialgarden
+```
+enter the python folder through the terminal or cmd (Command Prompt)
+
+```
+cd socialgarden/python
+```
+
 The API uses geocoder in order to find the coordinates of the device, based on IP.
 ```
 git clone https://github.com/DenisCarriere/geocoder
