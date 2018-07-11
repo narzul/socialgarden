@@ -29,6 +29,11 @@ Navigate to the geocoder folder and install package
 cd geocoder
 python2.7 setup.py install
 ```
+###### Note - if error, install with sudo
+
+```
+sudi python2.7 setup.py install
+```
 
 ## Use cases
 Whenever the social garden API client is used, it has to be imported as is standard for python programs.
