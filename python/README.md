@@ -42,7 +42,7 @@ The following test will open multiple terminal windows in order to demo their us
 
 
 ```
- bash API-test.sh 
+ ./TEST-API.sh
 ```
 
 
