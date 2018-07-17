@@ -50,18 +50,20 @@ def insertStream(StreamName,  Description, Sensor):
         'Content-Type': 'application/json',
     }
     g = geocoder.ip('me')
-    data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+str(g.lat)+', "Longitude":'+str(g.lng)+' }, "Sensor" : '+Sensor+' } '
+    lat = str(g.lat)
+    lng = str(g.lng)
+
+    data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+' }, "Sensor" : '+Sensor+' } '
     response = requests.post(address, headers=headers, data=data)
+
 
 def insertStreamManualCoordinates(StreamName, Description, Sensor, Lat,Lng):
     headers = {
         'Content-Type': 'application/json',
     }
-    g = geocoder.ip('me')
+
     data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+' }, "Sensor" : '+Sensor+' } '
     response = requests.post(address, headers=headers, data=data)
-    print("Data inserted into " + str(address))
-    print(data)
 
 def deleteStream(StreamName):
     #response = requests.delete(address+StreamName)

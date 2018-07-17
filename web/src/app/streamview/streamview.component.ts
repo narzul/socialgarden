@@ -10,7 +10,7 @@ import { Chart } from 'chart.js';
 })
 export class StreamviewComponent implements OnInit {
   initiated:boolean = false;
-  devices: any;
+  streams: any;
   streamName: String;
   collections: any;
   selectedColl: null;
@@ -38,80 +38,70 @@ export class StreamviewComponent implements OnInit {
 
 
   getData(value) {
-    this.dataSet = [];
-    this.streamName = value;
-    this.http.get('/devices/' + value).subscribe(data => {
-      this.devices = data;
-      this.lat = Number(this.devices[0].Location.Latitude);
-      this.lng = Number(this.devices[0].Location.Longitude);
+    var promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+        this.dataSet = [];
+        this.streamName = value;
+        this.http.get('/devices/' + value).subscribe(data => {
+          this.streams = data;
+          this.lat = Number(this.streams[0].Location.Latitude);
+          this.lng = Number(this.streams[0].Location.Longitude);
+        });
+        this.generateLabels();
+        resolve();
+      }, 100);
     });
-    this.generateLabels();
+    return promise;
+
+
+
+
   }
 
   generateLabels() {
-    this.streamLabels = [];
-    for (let dev of this.devices) {
-      this.streamLabels.push(dev.createdAt);
-    }
-    this.streamLabels.sort();
-    this.populateData();
+      var promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          this.streamLabels = [];
+          for(var i =0; i< this.streams.length;i++){
+            this.streamLabels.push(this.streams[i].createdAt);
+          }
+          this.streamLabels.sort();
+          this.populateData();
+          resolve();
+        }, 100);
+      });
+      return promise;
   }
 
   populateData() {
     this.sensorCount = 0;
-    for (var n = 1; n <= this.devices[0].Sensor.length; n++) {
+    for (var n = 0; n < this.streams[0].Sensor.length; n++) {
       //populate datasets
       let sensorData = {
-        "label": "",
-        "borderColor": this.borderColors,
+        "label": this.streams[0].Sensor[n].Name,
+        "borderColor": this.borderColors[n],
         "data": [],
       }
       //retrieve data from each individual datapoint in stream
-      for (let stream of this.devices) {
-        //retrieve individual sensors from each datapoint in stream
-
-        for (let sens of stream.Sensor) {
-          sensorData.label = sens.Name + " " + n;
-          //sensorData.label = this.devices[0].Sensor[n].Name
-          sensorData.data.push(sens.Value)
-
-        }
+      for(var m = 0; m< this.streams.length;m++){
+        sensorData.data.push(this.streams[m].Sensor[n].Value)
       }
+
       this.dataSet.push(sensorData);
       this.sensorCount++;
     }
+
     this.updateGraph();
   }
-
-  updateGraph() {
-    // https://coursetro.com/posts/code/126/Let's-build-an-Angular-5-Chart.js-App---Tutorial
-    this.chart.destroy();
-
-    this.config.type = this.chartType;
-    this.config.data.labels = this.streamLabels;
-    this.config.data.datasets = this.dataSet;
-    this.config.options.text = this.selectedColl
-
-    this.chart = new Chart('canvas', this.config);
-    this.chart.update();
-  }
-  onChange(value) {
-    this.getData(value);
-  }
-
-  ngOnInit() {
-    this.http.get('/devices/collection/list').subscribe(col => {
-      this.collections = col;
-      this.selectedColl = this.collections[0];
-    });
-
+  setConfig(){
     this.config = {
       type: this.chartType,
       data: {
-      //  labels: this.streamLabels,
-      //  datasets: this.dataSet
+        labels: this.streamLabels,
+        datasets: this.dataSet
       },
       options: {
+        text:this.selectedColl,
         scales: {
           yAxes: [{
             ticks: {
@@ -123,12 +113,30 @@ export class StreamviewComponent implements OnInit {
           mode: 'point'
         }, title: {
           display: true,
-        //  text: this.selectedColl
         }
       }
     };
+  }
 
-    this.getData('mystream3');
+  updateGraph() {
+    // https://coursetro.com/posts/code/126/Let's-build-an-Angular-5-Chart.js-App---Tutorial
+    this.chart.destroy();
+    this.setConfig();
+    this.chart = new Chart('canvas', this.config);
+  }
+
+  onChange(value) {
+    this.getData(value);
+  }
+
+  ngOnInit() {
+    //Get list of streams, for dropdown menu
+    this.http.get('/devices/collection/list').subscribe(collectionList => {
+      this.collections = collectionList;
+      this.selectedColl = this.collections[0];
+    });
+
+    this.getData(this.selectedColl);
   }
 
 }

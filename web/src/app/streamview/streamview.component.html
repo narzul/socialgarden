@@ -2,7 +2,7 @@
 
 <div class="container">
 
-  <span>  Select stream
+  <span> Select stream
     <select name="collectionSelect"   [(ngModel)]="selectedColl" (ngModelChange)="onChange($event)">
       <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
     </select>
@@ -13,7 +13,7 @@
       <div class="stream-info">
         <h1 ng-if="initiated">{{selectedColl}}</h1>
 
-        {{devices[0].Description}} <br> {{devices[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
+        {{streams[0].Description}} <br> {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
       </div>
       <div class="stream-info" ng-if="initiated">
         <agm-map [latitude]="lat" [longitude]="lng">
@@ -21,19 +21,6 @@
         </agm-map>
       </div>
     </div>
-    
-  //TODO remove testDiv
-  <div class="testDiv">
-
-    {{devices[0].Sensor[n].Name}}
-    <div *ngFor="let dev of dataSet">
-      {{streamName}}
-      {{dev.label}}
-      {{dev.borderColor}}
-      {{dev.data}}
-    </div>
-    sensorCount {{sensorCount}}
-  </div>
 
   <div *ngIf="chart">
     <canvas id="canvas">{{ chart }}</canvas>
@@ -47,7 +34,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let dev of devices">
+      <tr *ngFor="let dev of streams">
         <td>{{dev.DeviceName}}</td>
         <td *ngFor="let sens of dev.Sensor">{{sens.Name}} : {{sens.Value}}</td>
         <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
