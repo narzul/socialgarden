@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
-
+import { Pipe, PipeTransform } from '@angular/core';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-streamview',
   templateUrl: './streamview.component.html',
@@ -17,6 +18,7 @@ export class StreamviewComponent implements OnInit {
   config: any;
   tempStream: any;
   tempData: any;
+  pipe = new DatePipe('en-US'); // Use your own locale
 
   chart: Chart = new Chart('canvas', this.config); // This will hold our chart meta info
   dataSet = []; // Holding data for drawing into graph
@@ -85,7 +87,10 @@ export class StreamviewComponent implements OnInit {
       setTimeout(() => {
 
         for (var i = 0; i < this.streams.length; i++) {
-          this.streamLabels.push(this.streams[i].createdAt);
+          const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'short');
+          this.streamLabels.push(myFormattedDate);
+
+          //this.streamLabels.push(this.streams[i].createdAt);
         }
         //this.streamLabels.sort();
         this.populateData(value);

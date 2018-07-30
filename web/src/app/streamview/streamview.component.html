@@ -37,7 +37,7 @@
     <tbody>
       <tr *ngFor="let dev of streams">
         <td>{{dev.DeviceName}}</td>
-        <td *ngFor="let sens of dev.Sensor">{{sens.Name}} : {{sens.Value}}</td>
+        <td *ngFor="let sens of dev.Sensor">{{sens.Name}} : {{sens.Value}} </td>
         <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
       </tr>
     </tbody>
