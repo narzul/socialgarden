@@ -1,4 +1,5 @@
 @media screen and (min-width: 320px) and (max-width: 800px) and (orientation: portrait) {
+
   li {
     list-style: none;
   }
@@ -10,29 +11,29 @@
     display: block;
     font-weight: bold;
     margin: auto;
-    width: 300px;
+    width: 100vw;
   }
   h1, h2, h3, p {
     font-family: 'Raleway';
   }
   agm-map {
     height: 300px;
-    width: 100%;
+    width: 100vw;
   }
   table {
-    width: 100%;
+    width: 100vw;
     text-align: center;
     font-family: 'Raleway';
   }
 
   .container {
-    max-width: 800px;
     margin: auto;
     font-family: 'Raleway';
+    overflow: hidden;
   }
   .info {
     display: inline-block;
-    width: 100%;
+    width: 100vw;
   }
   .stream-info {
     width: 100vw;
@@ -40,10 +41,12 @@
   }
 
   .charts{
+    margin: auto 10px;
     transform: rotate(-90deg);
-    width:100vh;
-    height:100vw;
+    width: 100vh;
+    height: 100vh;
     display: inline-block;
+    left: 0;
   }
   #canvas {
     width:100vw;
