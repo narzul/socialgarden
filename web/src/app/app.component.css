@@ -4,16 +4,13 @@ header.app-header {
   background-color: #fff;
   padding: 0 16px;
   box-sizing: border-box;
-  height:200px;
-  border-bottom: 2px solid black;
   max-width: 800px;
   margin:auto;
 }
 
 header.app-header .real-logo  {
-  margin: 23px 0 27px 0;
   mix-blend-mode: multiply;
-  float: right;
+  display: inline-block;
 }
 header.app-header .search-form {
   float: left;

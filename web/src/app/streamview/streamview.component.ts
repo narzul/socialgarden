@@ -45,7 +45,7 @@ export class StreamviewComponent implements OnInit {
           this.dataSet = []; //Clean dataset
           this.streamName = value;
           this.http.get('/devices/' + value + '/one').subscribe(data => {
-            var streamLength = this.streams.length-1;
+            var streamLength = this.streams.length - 1;
             this.tempData = data;
             if (this.tempData.createdAt !== this.streams[streamLength].createdAt) {
               this.tempStream = data;
@@ -123,25 +123,73 @@ export class StreamviewComponent implements OnInit {
         datasets: this.dataSet
       },
       options: {
+
         text: this.selectedColl,
-        scales: {
+        legend: {
+             display: true,
+             labels: {
+               fontFamily: 'Raleway',
+             }
+         },
+           scales: {
           yAxes: [{
             ticks: {
-              fontFamily:'Raleway',
+              fontFamily: 'Raleway',
               beginAtZero: true
             }
           }],
           xAxes: [{
             ticks: {
-              fontFamily:'Raleway',
+              fontFamily: 'Raleway',
             }
           }]
+        },	// Container for pan options
+        pan: {
+          // Boolean to enable panning
+          enabled: true,
+
+          // Panning directions. Remove the appropriate direction to disable
+          // Eg. 'y' would only allow panning in the y direction
+          mode: 'xy',
+          rangeMin: {
+            // Format of min pan range depends on scale type
+            x: null,
+            y: null
+          },
+          rangeMax: {
+            // Format of max pan range depends on scale type
+            x: null,
+            y: null
+          }
+        },
+
+        // Container for zoom options
+        zoom: {
+          // Boolean to enable zooming
+          enabled: true,
+
+          // Enable drag-to-zoom behavior
+          drag: true,
+
+          // Zooming directions. Remove the appropriate direction to disable
+          // Eg. 'y' would only allow zooming in the y direction
+          mode: 'xy',
+          rangeMin: {
+            // Format of min zoom range depends on scale type
+            x: null,
+            y: null
+          },
+          rangeMax: {
+            // Format of max zoom range depends on scale type
+            x: null,
+            y: null
+          }
         },
         tooltips: {
           mode: 'point'
         }, title: {
           display: true,
-          fontFamily:'Raleway',
+          fontFamily: 'Raleway',
         },
         animation: {
           duration: 0
