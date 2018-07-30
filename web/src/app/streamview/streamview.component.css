@@ -37,11 +37,7 @@
   .stream-info {
     width: 100vw;
     display: inline-block;
-    height: 300px;
   }
-
-
-
 
   .charts{
     transform: rotate(-90deg);
