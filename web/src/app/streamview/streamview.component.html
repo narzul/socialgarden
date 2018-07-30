@@ -26,18 +26,23 @@
   <div class="charts" *ngIf="chart">
     <canvas id="canvas">{{ chart }}</canvas>
   </div>
+  <b>{{streams[0].DeviceName}}</b>
   <table class="table">
     <thead>
       <tr>
-        <th>DeviceName</th>
         <th>Sensor</th>
         <th>TimeStamp</th>
       </tr>
     </thead>
     <tbody>
       <tr *ngFor="let dev of streams">
-        <td>{{dev.DeviceName}}</td>
-        <td *ngFor="let sens of dev.Sensor">{{sens.Name}} : {{sens.Value}} </td>
+        <td >
+          <li *ngFor="let sens of dev.Sensor">
+              <ul>
+                  {{sens.Name}} : {{sens.Value}}
+              </ul>
+          </li>
+           </td>
         <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
       </tr>
     </tbody>
