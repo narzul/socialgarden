@@ -12,8 +12,8 @@ var mongoose = require('mongoose');
 
 //Main app. this file is uing express to route, and mongoose for database.
 mongoose.Promise = require('bluebird');
-mongoose.connect('mongodb://localhost/REALlab', {
-		promiseLibrary: require('bluebird')
+mongoose.connect('mongodb://localhost:27017/REALlab', {
+		useNewUrlParser: true
 	})
 	.then(() => console.log('connection succesful'))
 	.catch((err) => console.error(err));

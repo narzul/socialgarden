@@ -9,12 +9,14 @@ import { Chart } from 'chart.js';
 
 })
 export class StreamviewComponent implements OnInit {
-  initiated:boolean = false;
-  streams: any;
+  initiated: boolean = false;
+  streams: any = [];
   streamName: String;
   collections: any;
   selectedColl: null;
   config: any;
+  tempStream: any;
+  tempData: any;
 
   chart: Chart = new Chart('canvas', this.config); // This will hold our chart meta info
   dataSet = []; // Holding data for drawing into graph
@@ -36,44 +38,64 @@ export class StreamviewComponent implements OnInit {
   constructor(private http: HttpClient) { }
 
 
+  listenForNewData(value) {
+    while (true) {
+      var promise = new Promise((resolve, reject) => {
+        setTimeout(() => {
+          this.dataSet = []; //Clean dataset
+          this.streamName = value;
+          this.http.get('/devices/' + value + '/one').subscribe(data => {
+            var streamLength = this.streams.length-1;
+            this.tempData = data;
+            if (this.tempData.createdAt !== this.streams[streamLength].createdAt) {
+              this.tempStream = data;
+              this.streams.push(data);
+              this.streamLabels.push(this.streams[streamLength].createdAt);
+              this.populateData(value);
+            }
+          });
 
+          resolve();
+        }, 500);
+      });
+      return promise;
+    }
+  }
   getData(value) {
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
-        this.dataSet = [];
+        this.dataSet = []; //Clean dataset
         this.streamName = value;
         this.http.get('/devices/' + value).subscribe(data => {
           this.streams = data;
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
         });
-        this.generateLabels();
+        this.generateLabels(value);
+        this.initiated = true;
         resolve();
       }, 100);
     });
     return promise;
-
-
-
-
   }
 
-  generateLabels() {
-      var promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          this.streamLabels = [];
-          for(var i =0; i< this.streams.length;i++){
-            this.streamLabels.push(this.streams[i].createdAt);
-          }
-          this.streamLabels.sort();
-          this.populateData();
-          resolve();
-        }, 100);
-      });
-      return promise;
+  generateLabels(value) {
+    this.streamLabels = [];
+    var promise = new Promise((resolve, reject) => {
+      setTimeout(() => {
+
+        for (var i = 0; i < this.streams.length; i++) {
+          this.streamLabels.push(this.streams[i].createdAt);
+        }
+        //this.streamLabels.sort();
+        this.populateData(value);
+        resolve();
+      }, 100);
+    });
+    return promise;
   }
 
-  populateData() {
+  populateData(value) {
     this.sensorCount = 0;
     for (var n = 0; n < this.streams[0].Sensor.length; n++) {
       //populate datasets
@@ -83,7 +105,7 @@ export class StreamviewComponent implements OnInit {
         "data": [],
       }
       //retrieve data from each individual datapoint in stream
-      for(var m = 0; m< this.streams.length;m++){
+      for (var m = 0; m < this.streams.length; m++) {
         sensorData.data.push(this.streams[m].Sensor[n].Value)
       }
 
@@ -91,9 +113,9 @@ export class StreamviewComponent implements OnInit {
       this.sensorCount++;
     }
 
-    this.updateGraph();
+    this.updateGraph(value);
   }
-  setConfig(){
+  setConfig() {
     this.config = {
       type: this.chartType,
       data: {
@@ -101,11 +123,17 @@ export class StreamviewComponent implements OnInit {
         datasets: this.dataSet
       },
       options: {
-        text:this.selectedColl,
+        text: this.selectedColl,
         scales: {
           yAxes: [{
             ticks: {
+              fontFamily:'Raleway',
               beginAtZero: true
+            }
+          }],
+          xAxes: [{
+            ticks: {
+              fontFamily:'Raleway',
             }
           }]
         },
@@ -113,16 +141,21 @@ export class StreamviewComponent implements OnInit {
           mode: 'point'
         }, title: {
           display: true,
+          fontFamily:'Raleway',
+        },
+        animation: {
+          duration: 0
         }
       }
     };
   }
 
-  updateGraph() {
+  updateGraph(value) {
     // https://coursetro.com/posts/code/126/Let's-build-an-Angular-5-Chart.js-App---Tutorial
     this.chart.destroy();
     this.setConfig();
     this.chart = new Chart('canvas', this.config);
+    this.listenForNewData(value);
   }
 
   onChange(value) {
@@ -136,7 +169,10 @@ export class StreamviewComponent implements OnInit {
       this.selectedColl = this.collections[0];
     });
 
-    this.getData(this.selectedColl);
+    //init graph
+    setTimeout(() => {
+      this.getData(this.collections[0]);
+    }, 500);
   }
 
 }

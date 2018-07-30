@@ -6,6 +6,8 @@ header.app-header {
   box-sizing: border-box;
   height:200px;
   border-bottom: 2px solid black;
+  max-width: 800px;
+  margin:auto;
 }
 
 header.app-header .real-logo  {
@@ -37,7 +39,10 @@ header.app-header .search-field::placeholder {
   color: darkgray;
 }
 h1,h2,h3,p{
-  font-family: 'Raleway', sans-serif;
+  font-family: 'Raleway';
+}
+.info{
+  font-family: 'Raleway';
 }
 nav{
   text-align: center;

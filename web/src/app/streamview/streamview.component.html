@@ -11,9 +11,10 @@
   <!-- https://angular-maps.com/ -->
     <div class="info">
       <div class="stream-info">
-        <h1 ng-if="initiated">{{selectedColl}}</h1>
-
+        <h1>{{streams[0].DeviceName}}</h1>
+        <p>
         {{streams[0].Description}} <br> {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
+        </p>
       </div>
       <div class="stream-info" ng-if="initiated">
         <agm-map [latitude]="lat" [longitude]="lng">
