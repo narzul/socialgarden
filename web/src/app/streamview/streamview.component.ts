@@ -18,7 +18,7 @@ export class StreamviewComponent implements OnInit {
   ;
   tempStream: any;
   tempData: any;
-  pipe = new DatePipe('en-UK'); // Use your own locale
+  pipe = new DatePipe('en-EU'); // Use your own locale
 
   dataSet = []; // Holding data for drawing into graph
   streamLabels = [];
@@ -146,7 +146,7 @@ export class StreamviewComponent implements OnInit {
       setTimeout(() => {
 
         for (var i = 0; i < this.streams.length; i++) {
-          const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'short');
+          const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
           this.streamLabels.push(myFormattedDate);
 
           //this.streamLabels.push(this.streams[i].createdAt);
