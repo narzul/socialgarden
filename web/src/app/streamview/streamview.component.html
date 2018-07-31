@@ -1,5 +1,3 @@
-
-
 <div class="container">
 
   <span> Select stream
@@ -9,41 +7,59 @@
   </span>
 
   <!-- https://angular-maps.com/ -->
-    <div class="info">
-      <div class="stream-info">
-        <h1>{{streams[0].DeviceName}}</h1>
-        <p>
+  <div class="info">
+    <div class="stream-info">
+      <h1>{{streams[0].DeviceName}}</h1>
+      <p>
         {{streams[0].Description}} <br> {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
-        </p>
-      </div>
-      <div class="stream-info" ng-if="initiated">
-        <agm-map [latitude]="lat" [longitude]="lng">
-          <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
-        </agm-map>
-      </div>
+      </p>
     </div>
+    <div class="stream-info" ng-if="initiated">
+      <agm-map [latitude]="lat" [longitude]="lng">
+        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+      </agm-map>
+    </div>
+  </div>
 
   <div class="charts" *ngIf="chart">
-    <canvas id="canvas">{{ chart }}</canvas>
+    <canvas id="canvas"></canvas>
+    <div class="navigation">
+      <span class="navbtn" id="panleft">left</span>
+      <span class="navbtn" id="zoomin">+</span>
+      <span class="navbtn" id="reset">reset</span>
+      <span class="navbtn" id="zoomout">-</span>
+      <span class="navbtn" id="panright">right</span>
+    </div>
   </div>
-  <b>{{streams[0].DeviceName}}</b>
   <table class="table">
     <thead>
       <tr>
-        <th>Sensor</th>
+        <th>#</th>
         <th>TimeStamp</th>
+        <th class="thcent">Sensor</th>
+        <th class="thcent">Value</th>
+
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let dev of streams">
-        <td >
-          <li *ngFor="let sens of dev.Sensor">
-              <ul>
-                  {{sens.Name}} : {{sens.Value}}
-              </ul>
-          </li>
-           </td>
+      <tr *ngFor="let dev of streams;  let i = index">
+        <td>{{i+1}}</td>
+
         <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
+        <td>
+          <li *ngFor="let sens of dev.Sensor">
+            <ul>
+              {{sens.Name}}
+            </ul>
+          </li>
+        </td>
+        <td>
+          <li *ngFor="let sens of dev.Sensor">
+            <ul>
+               {{sens.Value}}
+            </ul>
+          </li>
+        </td>
       </tr>
     </tbody>
   </table>

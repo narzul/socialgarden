@@ -15,12 +15,11 @@ export class StreamviewComponent implements OnInit {
   streamName: String;
   collections: any;
   selectedColl: null;
-  config: any;
+  ;
   tempStream: any;
   tempData: any;
-  pipe = new DatePipe('en-US'); // Use your own locale
+  pipe = new DatePipe('en-UK'); // Use your own locale
 
-  chart: Chart = new Chart('canvas', this.config); // This will hold our chart meta info
   dataSet = []; // Holding data for drawing into graph
   streamLabels = [];
   title: string = 'My first AGM project';
@@ -36,6 +35,66 @@ export class StreamviewComponent implements OnInit {
     'rgba(153, 102, 255, 1)',
     'rgba(255, 159, 64, 1)',
   ];
+  config: any = {
+    type: this.chartType,
+    data: {
+      labels: this.streamLabels,
+      datasets: this.dataSet
+    },
+    options: {
+
+      text: this.selectedColl,
+      events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
+      legend: {
+        display: true,
+        labels: {
+          fontFamily: 'Raleway',
+        }
+      },
+      scales: {
+        yAxes: [{
+          ticks: {
+            fontFamily: 'Raleway',
+          }
+        }],
+        xAxes: [{
+          ticks: {
+            fontFamily: 'Raleway',
+          }
+        }]
+      },	// Container for pan options
+      pan: {
+         // Boolean to enable panning
+         enabled: true,
+
+         // Panning directions. Remove the appropriate direction to disable
+         // Eg. 'y' would only allow panning in the y direction
+         mode: 'x',
+
+         speed: 1
+     },
+
+     // Container for zoom options
+     zoom: {
+         // Boolean to enable zooming
+         enabled: true,
+         // Zooming directions. Remove the appropriate direction to disable
+         // Eg. 'y' would only allow zooming in the y direction
+         mode: 'x',
+     },
+      tooltips: {
+        mode: 'point'
+      }, title: {
+        display: true,
+        fontFamily: 'Raleway',
+      },
+      animation: {
+        duration: 0
+      }
+    }
+  }
+  chart: Chart = new Chart('canvas', this.config); // This will hold our chart meta info
+
 
   constructor(private http: HttpClient) { }
 
@@ -76,7 +135,7 @@ export class StreamviewComponent implements OnInit {
         this.generateLabels(value);
         this.initiated = true;
         resolve();
-      }, 100);
+      }, 500);
     });
     return promise;
   }
@@ -95,7 +154,7 @@ export class StreamviewComponent implements OnInit {
         //this.streamLabels.sort();
         this.populateData(value);
         resolve();
-      }, 100);
+      }, 500);
     });
     return promise;
   }
@@ -121,6 +180,7 @@ export class StreamviewComponent implements OnInit {
     this.updateGraph(value);
   }
   setConfig() {
+    //// TODO: condence this. theres a lot of rendudancy
     this.config = {
       type: this.chartType,
       data: {
@@ -130,17 +190,17 @@ export class StreamviewComponent implements OnInit {
       options: {
 
         text: this.selectedColl,
+        events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
         legend: {
-             display: true,
-             labels: {
-               fontFamily: 'Raleway',
-             }
-         },
-           scales: {
+          display: true,
+          labels: {
+            fontFamily: 'Raleway',
+          }
+        },
+        scales: {
           yAxes: [{
             ticks: {
               fontFamily: 'Raleway',
-              beginAtZero: true
             }
           }],
           xAxes: [{
@@ -150,46 +210,24 @@ export class StreamviewComponent implements OnInit {
           }]
         },	// Container for pan options
         pan: {
-          // Boolean to enable panning
-          enabled: true,
+           // Boolean to enable panning
+           enabled: true,
 
-          // Panning directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow panning in the y direction
-          mode: 'xy',
-          rangeMin: {
-            // Format of min pan range depends on scale type
-            x: null,
-            y: null
-          },
-          rangeMax: {
-            // Format of max pan range depends on scale type
-            x: null,
-            y: null
-          }
-        },
+           // Panning directions. Remove the appropriate direction to disable
+           // Eg. 'y' would only allow panning in the y direction
+           mode: 'x',
 
-        // Container for zoom options
-        zoom: {
-          // Boolean to enable zooming
-          enabled: true,
+           speed: 1
+       },
 
-          // Enable drag-to-zoom behavior
-          drag: true,
-
-          // Zooming directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow zooming in the y direction
-          mode: 'xy',
-          rangeMin: {
-            // Format of min zoom range depends on scale type
-            x: null,
-            y: null
-          },
-          rangeMax: {
-            // Format of max zoom range depends on scale type
-            x: null,
-            y: null
-          }
-        },
+       // Container for zoom options
+       zoom: {
+           // Boolean to enable zooming
+           enabled: true,
+           // Zooming directions. Remove the appropriate direction to disable
+           // Eg. 'y' would only allow zooming in the y direction
+           mode: 'x',
+       },
         tooltips: {
           mode: 'point'
         }, title: {
@@ -201,6 +239,21 @@ export class StreamviewComponent implements OnInit {
         }
       }
     };
+
+    //// TODO: Alternative methods for setting config
+    //Set missing config directly
+    // this.config.type = this.chartType;
+    // this.config.data.labels = this.streamLabels;
+    // this.config.data.dataset = this.dataSet;
+    // this.config.options.text = this.selectedColl;
+
+
+    //Trying to directly set chart
+    // this.chart.type = this.chartType;
+    // this.chart.data.labels = this.streamLabels;
+    // this.chart.data.dataset = this.dataSet;
+    // this.chart.options.text = this.selectedColl;
+
   }
 
   updateGraph(value) {
@@ -226,6 +279,9 @@ export class StreamviewComponent implements OnInit {
     setTimeout(() => {
       this.getData(this.collections[0]);
     }, 500);
+  }
+  ngAfterViewInit(){
+    this.chart = new Chart('canvas', this.config);
   }
 
 }

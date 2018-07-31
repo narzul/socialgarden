@@ -1,5 +1,31 @@
+th{
+  text-align: left;
+}
 td{
   vertical-align:top;
+  text-align: left;
+}
+ul{
+  padding: 0px;
+  text-align: center;
+}
+.thcent{
+  text-align: center;
+}
+.navbtn{
+  display: inline;
+  width: 50px;
+  text-align: center;
+  margin: 0 5px;
+  padding: 5px 10px;
+  font-size: 20px;
+  border: solid 1px gray;
+  cursor: pointer;
+}
+.navigation{
+  width:100%;
+  margin: 10px auto;
+  text-align: center;
 }
 @media screen and (min-width: 320px) and (max-width: 800px) and (orientation: portrait) {
 
@@ -47,8 +73,8 @@ td{
   .charts{
     margin: auto 10px;
     transform: rotate(-90deg);
-    width: 100vh;
-    height: 100vh;
+    width: 90vh;
+    height: 90vh;
     display: inline-block;
     left: 0;
   }
@@ -60,6 +86,10 @@ td{
 }
 
 @media (min-width: 800px) {
+  .charts{
+      border: solid 1px black;
+      padding:5px;
+  }
   li {
     list-style: none;
   }
