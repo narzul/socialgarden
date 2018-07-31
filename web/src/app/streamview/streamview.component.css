@@ -59,17 +59,22 @@ ul{
     margin: auto;
     font-family: 'Raleway';
     overflow: hidden;
-
+    padding: 0px;
   }
   .info {
     display: inline-block;
     width: 100vw;
   }
   .stream-info {
+    padding: 5px;
     width: 100vw;
     display: inline-block;
   }
-
+  .stream-info:nth-child(even) {
+    padding: 0px;
+    width: 100vw;
+    display: inline-block;
+  }
   .charts{
     margin: auto 10px;
     transform: rotate(-90deg);
