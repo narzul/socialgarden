@@ -118,19 +118,25 @@ export class StreamviewComponent implements OnInit {
     } else {
       this.zoomed = true;
     }
+    this.chart.update();
+
   }
   resetZoom() {
     this.zoomCount = 0;
     this.zoomed = false;
     alert("resetZoom");
+    this.chart.update();
   }
   panLeft() {
     alert("panLeft");
+    this.chart.update();
   }
   panRight() {
     alert("panRight");
+    this.chart.update();
   }
   listenForNewData(value) {
+
     setTimeout(() => {
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
@@ -147,11 +153,31 @@ export class StreamviewComponent implements OnInit {
           //this.streamLabels.push(myFormattedDate);
           this.chart.data.labels.push(myFormattedDate);
           console.log('new data ' + this.tempData )
-          this.chart.update();
 
           //PUSH DATA PUSH
+
+          for (var n = 0; n < this.tempStream.Sensor.length; n++) {
+            //populate datasets
+            let sensorData = {
+              "label": this.tempStream.Sensor[n].Name,
+              "borderColor": this.borderColors[n],
+              "data": [],
+            }
+            //retrieve data from each individual datapoint in stream
+            sensorData.data.push(this.tempStream.Sensor[n].Value)
+
+            this.chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(sensorData);
+            });
+          }
+
+
+
+          this.chart.update();
+          this.listenForNewData(value);
         } else {
           console.log('old data ' + this.tempData )
+          this.listenForNewData(value);
         }
       });
     }, 1000);
