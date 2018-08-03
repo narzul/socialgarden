@@ -15,7 +15,9 @@ export class StreamviewComponent implements OnInit {
   streamName: String;
   collections: any;
   selectedColl: null;
-  ;
+  zoomed: boolean = false;
+  zoomCount: number = 0;
+  runningService:boolean = false;
   tempStream: any;
   tempData: any;
   pipe = new DatePipe('en-EU'); // Use your own locale
@@ -41,6 +43,7 @@ export class StreamviewComponent implements OnInit {
       labels: this.streamLabels,
       datasets: this.dataSet
     },
+
     options: {
 
       text: this.selectedColl,
@@ -64,24 +67,24 @@ export class StreamviewComponent implements OnInit {
         }]
       },	// Container for pan options
       pan: {
-         // Boolean to enable panning
-         enabled: true,
+        // Boolean to enable panning
+        enabled: true,
 
-         // Panning directions. Remove the appropriate direction to disable
-         // Eg. 'y' would only allow panning in the y direction
-         mode: 'x',
+        // Panning directions. Remove the appropriate direction to disable
+        // Eg. 'y' would only allow panning in the y direction
+        mode: 'x',
 
-         speed: 1
-     },
+        speed: 1
+      },
 
-     // Container for zoom options
-     zoom: {
-         // Boolean to enable zooming
-         enabled: true,
-         // Zooming directions. Remove the appropriate direction to disable
-         // Eg. 'y' would only allow zooming in the y direction
-         mode: 'x',
-     },
+      // Container for zoom options
+      zoom: {
+        // Boolean to enable zooming
+        enabled: true,
+        // Zooming directions. Remove the appropriate direction to disable
+        // Eg. 'y' would only allow zooming in the y direction
+        mode: 'x',
+      },
       tooltips: {
         mode: 'point'
       }, title: {
@@ -93,44 +96,77 @@ export class StreamviewComponent implements OnInit {
       }
     }
   }
-  chart: Chart = new Chart('canvas', this.config); // This will hold our chart meta info
-
+  chart: Chart = []; // This will hold our chart meta info
+  firstHeader: string = null;
 
   constructor(private http: HttpClient) { }
 
-
-  listenForNewData(value) {
-    while (true) {
-      var promise = new Promise((resolve, reject) => {
-        setTimeout(() => {
-          this.dataSet = []; //Clean dataset
-          this.streamName = value;
-          this.http.get('/devices/' + value + '/one').subscribe(data => {
-            var streamLength = this.streams.length - 1;
-            this.tempData = data;
-            if (this.tempData.createdAt !== this.streams[streamLength].createdAt) {
-              this.tempStream = data;
-              this.streams.push(data);
-              this.streamLabels.push(this.streams[streamLength].createdAt);
-              this.populateData(value);
-            }
-          });
-
-          resolve();
-        }, 500);
-      });
-      return promise;
+  zoomIn() {
+    this.zoomCount++;
+    alert("zoomIn " + this.zoomCount);
+    if (this.zoomCount != 0) {
+      this.zoomed = true;
+    } else {
+      this.zoomed = false;
     }
+  }
+  zoomOut() {
+    this.zoomCount--;
+    alert("zoomOut " + this.zoomCount);
+    if (this.zoomCount === 0) {
+      this.zoomed = false;
+    } else {
+      this.zoomed = true;
+    }
+  }
+  resetZoom() {
+    this.zoomCount = 0;
+    this.zoomed = false;
+    alert("resetZoom");
+  }
+  panLeft() {
+    alert("panLeft");
+  }
+  panRight() {
+    alert("panRight");
+  }
+  listenForNewData(value) {
+    setTimeout(() => {
+      //Get last data from device stream
+      this.http.get('/devices/' + value + '/one').subscribe(data => {
+        this.tempData = data;
+
+        if (this.tempData.createdAt !== this.streams[this.streams.length-1].createdAt) {
+          //console.log(this.tempData.createdAt + " - " + this.streams[this.streams.length-1].createdAt)
+          //console.log('new incomming data point')
+          this.tempStream = data;
+          //this.streams.push(data);
+
+          //PUSH NEW LABELS
+          const myFormattedDate = this.pipe.transform(this.streams[this.streams.length-1].createdAt, 'HH:mm dd/MM/yy');
+          //this.streamLabels.push(myFormattedDate);
+          this.chart.data.labels.push(myFormattedDate);
+          console.log('new data ' + this.tempData )
+          this.chart.update();
+
+          //PUSH DATA PUSH
+        } else {
+          console.log('old data ' + this.tempData )
+        }
+      });
+    }, 1000);
   }
   getData(value) {
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
         this.dataSet = []; //Clean dataset
         this.streamName = value;
+
         this.http.get('/devices/' + value).subscribe(data => {
           this.streams = data;
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
+          this.firstHeader = this.streams[0].DeviceName;
         });
         this.generateLabels(value);
         this.initiated = true;
@@ -210,24 +246,24 @@ export class StreamviewComponent implements OnInit {
           }]
         },	// Container for pan options
         pan: {
-           // Boolean to enable panning
-           enabled: true,
+          // Boolean to enable panning
+          enabled: true,
 
-           // Panning directions. Remove the appropriate direction to disable
-           // Eg. 'y' would only allow panning in the y direction
-           mode: 'x',
+          // Panning directions. Remove the appropriate direction to disable
+          // Eg. 'y' would only allow panning in the y direction
+          mode: 'x',
 
-           speed: 1
-       },
+          speed: 1
+        },
 
-       // Container for zoom options
-       zoom: {
-           // Boolean to enable zooming
-           enabled: true,
-           // Zooming directions. Remove the appropriate direction to disable
-           // Eg. 'y' would only allow zooming in the y direction
-           mode: 'x',
-       },
+        // Container for zoom options
+        zoom: {
+          // Boolean to enable zooming
+          enabled: true,
+          // Zooming directions. Remove the appropriate direction to disable
+          // Eg. 'y' would only allow zooming in the y direction
+          mode: 'x',
+        },
         tooltips: {
           mode: 'point'
         }, title: {
@@ -261,11 +297,13 @@ export class StreamviewComponent implements OnInit {
     this.chart.destroy();
     this.setConfig();
     this.chart = new Chart('canvas', this.config);
+    this.runningService = true;
     this.listenForNewData(value);
   }
 
   onChange(value) {
     this.getData(value);
+    this.runningService = false;
   }
 
   ngOnInit() {
@@ -280,7 +318,7 @@ export class StreamviewComponent implements OnInit {
       this.getData(this.collections[0]);
     }, 500);
   }
-  ngAfterViewInit(){
+  ngAfterViewInit() {
     this.chart = new Chart('canvas', this.config);
   }
 

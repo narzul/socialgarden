@@ -1,3 +1,7 @@
+.myChartDiv {
+  max-width: 600px;
+  max-height: 400px;
+}
 th{
   text-align: left;
 }

@@ -1,6 +1,6 @@
 <div class="container">
 
-  <span> Select stream
+  <span *ngIf="initiated"> Select stream
     <select name="collectionSelect"   [(ngModel)]="selectedColl" (ngModelChange)="onChange($event)">
       <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
     </select>
@@ -8,27 +8,29 @@
 
   <!-- https://angular-maps.com/ -->
   <div class="info">
-    <div class="stream-info">
-      <h1>{{streams[0].DeviceName}}</h1>
-      <p>
-        {{streams[0].Description}} <br> {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
+    <div class="stream-info" *ngIf="initiated">
+      <h1 *ngIf="firstHeader" >{{streams[0].DeviceName}}</h1>
+      <p *ngIf="firstHeader">
+        {{streams[0].Description}}
       </p>
+      <br>
+      <b *ngIf="firstHeader">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</b>
     </div>
-    <div class="stream-info" ng-if="initiated">
+    <div class="stream-info" *ngIf="initiated">
       <agm-map [latitude]="lat" [longitude]="lng">
         <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
       </agm-map>
     </div>
   </div>
 
-  <div class="charts" *ngIf="chart">
-    <canvas id="canvas"></canvas>
+  <div class="charts" *ngIf="initiated">
+    <canvas id="canvas"> {{ chart }} </canvas>
     <div class="navigation">
-      <span class="navbtn" id="panleft">left</span>
-      <span class="navbtn" id="zoomin">+</span>
-      <span class="navbtn" id="reset">reset</span>
-      <span class="navbtn" id="zoomout">-</span>
-      <span class="navbtn" id="panright">right</span>
+      <span *ngIf="zoomed" class="navbtn" id="panleft" (click)="panLeft()">left</span>
+      <span class="navbtn" id="zoomout" (click)="zoomOut()">-</span>
+      <span *ngIf="zoomed" class="navbtn" id="reset" (click)="resetZoom()">reset</span>
+      <span class="navbtn" id="zoomin" (click)="zoomIn()">+</span>
+      <span *ngIf="zoomed" class="navbtn" id="panright" (click)="panRight()">right</span>
     </div>
   </div>
   <table class="table">
