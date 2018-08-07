@@ -127,15 +127,7 @@ export class StreamviewComponent implements OnInit {
             this.chart.data.labels.push(myFormattedDate);
             //PUSH DATA FOR EACH SENSOR
             for (var n = 0; n < this.tempData.Sensor.length; n++) {
-              //populate datasets
-              // let sensorData = {
-              //   "label": this.tempData.Sensor[n].Name,
-              //   "borderColor": this.borderColors[n],
-              //   "data": [],
-              // }
-              //retrieve data from each individual datapoint in stream
-              //sensorData.data.push(this.tempData.Sensor[n].Value)
-
+      
               this.chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(this.tempData.Sensor[n].Value);
               });

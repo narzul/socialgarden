@@ -48,6 +48,7 @@ router.get('/:DeviceName/:one', function(req, res, next) {
 			console.log('collection dropped');
 		});
 		StreamSchema.collection.drop();
+		res.json('Stream dropped');
 	}
 	if (DeviceName == "collection" && paramTwo == "list") {
 		var coll = [];
