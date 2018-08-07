@@ -11,17 +11,17 @@ import { DatePipe } from '@angular/common';
 })
 export class StreamviewComponent implements OnInit {
   initiated: boolean = false;
+  listenToData: boolean = false;
   streams: any = [];
   streamName: String;
   collections: any;
   selectedColl: null;
   zoomed: boolean = false;
   zoomCount: number = 0;
-  runningService:boolean = false;
-  tempStream: any;
+  //  tempStream: any;
   tempData: any;
   pipe = new DatePipe('en-EU'); // Use your own locale
-
+  globalFunc: any;
   dataSet = []; // Holding data for drawing into graph
   streamLabels = [];
   title: string = 'My first AGM project';
@@ -98,91 +98,68 @@ export class StreamviewComponent implements OnInit {
   }
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
+  testInterval: number = 100;
 
   constructor(private http: HttpClient) { }
+  addData(chart, label, data) {
+    chart.data.labels.push(label);
+    chart.data.datasets.forEach((dataset) => {
+      dataset.data.push(data);
+    });
+    chart.update();
+  }
 
-  zoomIn() {
-    this.zoomCount++;
-    alert("zoomIn " + this.zoomCount);
-    if (this.zoomCount != 0) {
-      this.zoomed = true;
-    } else {
-      this.zoomed = false;
-    }
-  }
-  zoomOut() {
-    this.zoomCount--;
-    alert("zoomOut " + this.zoomCount);
-    if (this.zoomCount === 0) {
-      this.zoomed = false;
-    } else {
-      this.zoomed = true;
-    }
-    this.chart.update();
-
-  }
-  resetZoom() {
-    this.zoomCount = 0;
-    this.zoomed = false;
-    alert("resetZoom");
-    this.chart.update();
-  }
-  panLeft() {
-    alert("panLeft");
-    this.chart.update();
-  }
-  panRight() {
-    alert("panRight");
-    this.chart.update();
-  }
   listenForNewData(value) {
 
     setTimeout(() => {
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
         this.tempData = data;
+        console.log(this.tempData.createdAt !== this.streams[this.streams.length - 1].createdAt);
+        if (this.tempData.createdAt !== this.streams[this.streams.length - 1].createdAt) {
+          //  this.tempStream = data;
+          this.streams.push(data);
 
-        if (this.tempData.createdAt !== this.streams[this.streams.length-1].createdAt) {
-          //console.log(this.tempData.createdAt + " - " + this.streams[this.streams.length-1].createdAt)
-          //console.log('new incomming data point')
-          this.tempStream = data;
-          //this.streams.push(data);
+          //CHECK IF DATAPOINT HAVE DIFFERENT TIMESTAMP THEN THE PREVIEOUS ONE
+          const myFormattedDate = this.pipe.transform(this.streams[this.streams.length - 1].createdAt, 'HH:mm dd/MM/yy');
+          if (this.chart.data.labels[this.chart.data.labels.length] !== myFormattedDate) {
+            //PUSH NEW LABELS
+            this.chart.data.labels.push(myFormattedDate);
+            //PUSH DATA FOR EACH SENSOR
+            for (var n = 0; n < this.tempData.Sensor.length; n++) {
+              //populate datasets
+              // let sensorData = {
+              //   "label": this.tempData.Sensor[n].Name,
+              //   "borderColor": this.borderColors[n],
+              //   "data": [],
+              // }
+              //retrieve data from each individual datapoint in stream
+              //sensorData.data.push(this.tempData.Sensor[n].Value)
 
-          //PUSH NEW LABELS
-          const myFormattedDate = this.pipe.transform(this.streams[this.streams.length-1].createdAt, 'HH:mm dd/MM/yy');
-          //this.streamLabels.push(myFormattedDate);
-          this.chart.data.labels.push(myFormattedDate);
-          console.log('new data ' + this.tempData )
+              this.chart.data.datasets.forEach((dataset) => {
+                dataset.data.push(this.tempData.Sensor[n].Value);
+              });
 
-          //PUSH DATA PUSH
-
-          for (var n = 0; n < this.tempStream.Sensor.length; n++) {
-            //populate datasets
-            let sensorData = {
-              "label": this.tempStream.Sensor[n].Name,
-              "borderColor": this.borderColors[n],
-              "data": [],
             }
-            //retrieve data from each individual datapoint in stream
-            sensorData.data.push(this.tempStream.Sensor[n].Value)
 
-            this.chart.data.datasets.forEach((dataset) => {
-                dataset.data.push(sensorData);
-            });
+            this.chart.update();
           }
 
 
 
-          this.chart.update();
-          this.listenForNewData(value);
-        } else {
-          console.log('old data ' + this.tempData )
-          this.listenForNewData(value);
         }
+        if (!this.listenToData) {
+          return;
+        }
+        if (this.listenToData) {
+          return this.globalFunc = this.listenForNewData(value);
+        }
+
       });
-    }, 1000);
+    }, this.testInterval);
   }
   getData(value) {
+
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
         this.dataSet = []; //Clean dataset
@@ -321,15 +298,53 @@ export class StreamviewComponent implements OnInit {
   updateGraph(value) {
     // https://coursetro.com/posts/code/126/Let's-build-an-Angular-5-Chart.js-App---Tutorial
     this.chart.destroy();
+    this.globalFunc = null;
     this.setConfig();
     this.chart = new Chart('canvas', this.config);
-    this.runningService = true;
-    this.listenForNewData(value);
+    this.globalFunc = this.listenForNewData(value);
+    this.listenToData = true;
+  }
+
+
+
+  zoomIn() {
+    this.zoomCount++;
+    alert("zoomIn " + this.zoomCount);
+    if (this.zoomCount != 0) {
+      this.zoomed = true;
+    } else {
+      this.zoomed = false;
+    }
+  }
+  zoomOut() {
+    this.zoomCount--;
+    alert("zoomOut " + this.zoomCount);
+    if (this.zoomCount === 0) {
+      this.zoomed = false;
+    } else {
+      this.zoomed = true;
+    }
+    this.chart.update();
+
+  }
+  resetZoom() {
+    this.zoomCount = 0;
+    this.zoomed = false;
+    alert("resetZoom");
+    this.chart.update();
+  }
+  panLeft() {
+    alert("panLeft");
+    this.chart.update();
+  }
+  panRight() {
+    alert("panRight");
+    this.chart.update();
   }
 
   onChange(value) {
+    this.listenToData = false;
     this.getData(value);
-    this.runningService = false;
   }
 
   ngOnInit() {
