@@ -92,13 +92,13 @@ export class StreamviewComponent implements OnInit {
         fontFamily: 'Raleway',
       },
       animation: {
-        duration: 0
+        duration: 100
       }
     }
   }
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
-  testInterval: number = 100;
+  testInterval: number = 1000;
 
   constructor(private http: HttpClient) { }
   addData(chart, label, data) {
@@ -115,7 +115,6 @@ export class StreamviewComponent implements OnInit {
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
         this.tempData = data;
-        console.log(this.tempData.createdAt !== this.streams[this.streams.length - 1].createdAt);
         if (this.tempData.createdAt !== this.streams[this.streams.length - 1].createdAt) {
           //  this.tempStream = data;
           this.streams.push(data);
@@ -127,7 +126,7 @@ export class StreamviewComponent implements OnInit {
             this.chart.data.labels.push(myFormattedDate);
             //PUSH DATA FOR EACH SENSOR
             for (var n = 0; n < this.tempData.Sensor.length; n++) {
-      
+
               this.chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(this.tempData.Sensor[n].Value);
               });
@@ -266,7 +265,7 @@ export class StreamviewComponent implements OnInit {
           fontFamily: 'Raleway',
         },
         animation: {
-          duration: 0
+          duration: 100
         }
       }
     };

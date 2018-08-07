@@ -33,36 +33,49 @@
       <span *ngIf="zoomed" class="navbtn" id="panright" (click)="panRight()">right</span>
     </div>
   </div>
-  <table class="table">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>TimeStamp</th>
-        <th class="thcent">Sensor</th>
-        <th class="thcent">Value</th>
 
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let dev of streams;  let i = index">
-        <td>{{i+1}}</td>
 
-        <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
-        <td>
-          <li *ngFor="let sens of dev.Sensor">
-            <ul>
-              {{sens.Name}}
-            </ul>
-          </li>
-        </td>
-        <td>
-          <li *ngFor="let sens of dev.Sensor">
-            <ul>
-               {{sens.Value}}
-            </ul>
-          </li>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+
+  <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    See detailed data
+  </button>
+  <div class="collapse" id="collapseExample">
+    <div class="well">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>TimeStamp</th>
+            <th class="thcent">Sensor</th>
+            <th class="thcent">Value</th>
+
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dev of streams;  let i = index">
+            <td>{{i+1}}</td>
+
+            <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
+            <td>
+              <li *ngFor="let sens of dev.Sensor">
+                <ul>
+                  {{sens.Name}}
+                </ul>
+              </li>
+            </td>
+            <td>
+              <li *ngFor="let sens of dev.Sensor">
+                <ul>
+                   {{sens.Value}}
+                </ul>
+              </li>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+
 </div>

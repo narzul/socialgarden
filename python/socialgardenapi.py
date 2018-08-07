@@ -5,8 +5,8 @@ import datetime
 import geocoder
 import requests
 import json
-#address = 'http://159.65.116.139:3000/devices/'
-address = 'http://localhost:3000/devices/'
+address = 'http://159.65.116.139:3000/devices/'
+#address = 'http://localhost:3000/devices/'
 
 #Check it stream exists in the database.
 def streamExists(StreamName):
