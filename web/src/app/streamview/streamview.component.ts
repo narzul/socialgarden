@@ -29,13 +29,10 @@ export class StreamviewComponent implements OnInit {
   lng: number = 12;
   sensorCount: number = 0;
   chartType: String = 'line';
+
   borderColors: any = [
-    'rgba(255,99,132,1)',
-    'rgba(54, 162, 235, 1)',
-    'rgba(255, 206, 86, 1)',
-    'rgba(75, 192, 192, 1)',
-    'rgba(153, 102, 255, 1)',
-    'rgba(255, 159, 64, 1)',
+    'rgba(255,99,132,1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)','rgba(255, 159, 64, 1)',
+    '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6','#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D','#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399','#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680','#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3','#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
   ];
   config: any = {
     type: this.chartType,
@@ -101,13 +98,6 @@ export class StreamviewComponent implements OnInit {
   testInterval: number = 1000;
 
   constructor(private http: HttpClient) { }
-  addData(chart, label, data) {
-    chart.data.labels.push(label);
-    chart.data.datasets.forEach((dataset) => {
-      dataset.data.push(data);
-    });
-    chart.update();
-  }
 
   listenForNewData(value) {
 
@@ -231,6 +221,7 @@ export class StreamviewComponent implements OnInit {
           yAxes: [{
             ticks: {
               fontFamily: 'Raleway',
+              beginAtZero:true
             }
           }],
           xAxes: [{
@@ -242,12 +233,9 @@ export class StreamviewComponent implements OnInit {
         pan: {
           // Boolean to enable panning
           enabled: true,
-
           // Panning directions. Remove the appropriate direction to disable
           // Eg. 'y' would only allow panning in the y direction
           mode: 'x',
-
-          speed: 1
         },
 
         // Container for zoom options
@@ -269,20 +257,6 @@ export class StreamviewComponent implements OnInit {
         }
       }
     };
-
-    //// TODO: Alternative methods for setting config
-    //Set missing config directly
-    // this.config.type = this.chartType;
-    // this.config.data.labels = this.streamLabels;
-    // this.config.data.dataset = this.dataSet;
-    // this.config.options.text = this.selectedColl;
-
-
-    //Trying to directly set chart
-    // this.chart.type = this.chartType;
-    // this.chart.data.labels = this.streamLabels;
-    // this.chart.data.dataset = this.dataSet;
-    // this.chart.options.text = this.selectedColl;
 
   }
 

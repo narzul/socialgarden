@@ -95,6 +95,10 @@ ul{
 }
 
 @media (min-width: 800px) {
+  .details{
+    width:100%;
+    margin:10px 0;
+  }
   .charts{
       border: solid 1px black;
       padding:5px;
