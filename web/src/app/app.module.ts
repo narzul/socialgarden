@@ -9,7 +9,6 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { RouterModule, Routes } from '@angular/router';
-import { GraphComponent } from './graph/graph.component';
 import { StreamviewComponent } from './streamview/streamview.component';
 import { AgmCoreModule } from '@agm/core';
 
@@ -26,7 +25,6 @@ const appRoutes: Routes = [
 @NgModule({
   declarations: [
     AppComponent,
-    GraphComponent,
     StreamviewComponent,
   ],
   imports: [
