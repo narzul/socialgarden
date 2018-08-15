@@ -173,6 +173,7 @@ export class StreamviewComponent implements OnInit {
   // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
     this.generateLabels(value);
   });
+  return promise;
   }
 
   generateLabels(value) {
@@ -195,11 +196,9 @@ export class StreamviewComponent implements OnInit {
       }, this.testInterval);
     });
     promise.then(() => {
-  // successMessage is whatever we passed in the resolve(...) function above.
-  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-    this.generateLabels(value);
+      this.populateData(value);
   });
-    //return promise;
+    return promise;
   }
 
   populateData(value) {
