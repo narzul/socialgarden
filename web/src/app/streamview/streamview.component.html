@@ -7,8 +7,8 @@
   </div>
   <div class="navigation">
      <b>Select time interval</b><br>
-    <span class="navDates">  <angular2-date-picker id="firstDatePicker" [(ngModel)]="firstDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="firstSettings"></angular2-date-picker></span>
-    <span class="navDates">  <angular2-date-picker id="lastDatePicker" [(ngModel)]="lastDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="lastSettings"></angular2-date-picker></span>
+    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="firstDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="firstSettings"></angular2-date-picker></span>
+    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="lastDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="lastSettings"></angular2-date-picker></span>
   </div>
   <!-- https://angular-maps.com/ -->
   <div class="info">

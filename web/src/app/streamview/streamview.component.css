@@ -36,6 +36,9 @@ ul{
   text-align: left;
   font-weight: bold;
 }
+.datepickers{
+  text-align: center !important;
+}
 @media screen and (min-width: 320px) and (max-width: 800px) and (orientation: portrait) {
 
   li {
