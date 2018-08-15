@@ -305,6 +305,7 @@ export class StreamviewComponent implements OnInit {
     //Get list of streams, for dropdown menu
     this.http.get('/devices/collection/list').subscribe(collectionList => {
       this.collections = collectionList;
+      this.collections.sort();
       this.selectedColl = this.collections[0];
     });
 
