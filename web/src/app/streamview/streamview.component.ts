@@ -34,6 +34,8 @@ export class StreamviewComponent implements OnInit {
   lng: number = 12;
   sensorCount: number = 0;
   chartType: String = 'line';
+  firstDate: Date;
+  lastDate: Date;
 
   borderColors: any = [
     'rgba(255,99,132,1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)','rgba(255, 159, 64, 1)',
@@ -65,6 +67,8 @@ export class StreamviewComponent implements OnInit {
         xAxes: [{
           ticks: {
             fontFamily: 'Raleway',
+            min:this.firstDate,
+            max:this.lastDate,
           }
         }]
       },	// Container for pan options
@@ -90,10 +94,8 @@ export class StreamviewComponent implements OnInit {
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
   testInterval: number = 1000;
-  firstDate: Date;
-  lastDate: Date = new Date();
 
-    firstSetting = {
+    firstSettings = {
         bigBanner: true,
         timePicker: true,
         format: 'HH:mm dd/MM/yy',
@@ -103,7 +105,7 @@ export class StreamviewComponent implements OnInit {
           bigBanner: true,
           timePicker: true,
           format: 'HH:mm dd/MM/yy',
-          defaultOpen: true
+          defaultOpen: false
         }
 
   constructor(private http: HttpClient) { }
@@ -148,6 +150,7 @@ export class StreamviewComponent implements OnInit {
       });
     }, this.testInterval);
   }
+
   getData(value) {
 
     var promise = new Promise((resolve, reject) => {
@@ -179,10 +182,12 @@ export class StreamviewComponent implements OnInit {
           if(i==0){
              this.firstDate = new Date(myFormattedDate)
           }
+          if(i==this.streams.length){
+             this.lastDate = new Date(myFormattedDate)
+          }
           this.streamLabels.push(myFormattedDate);
 
         }
-        this.streamLabels.sort();
         this.populateData(value);
         resolve();
       }, 500);
@@ -238,6 +243,8 @@ export class StreamviewComponent implements OnInit {
           xAxes: [{
             ticks: {
               fontFamily: 'Raleway',
+              min:this.firstDate,
+              max:this.lastDate,
             }
           }]
         },	// Container for pan options
@@ -280,10 +287,6 @@ export class StreamviewComponent implements OnInit {
     this.globalFunc = this.listenForNewData(value);
     this.listenToData = true;
   }
-
-
-
-
 
   onChange(value) {
     this.listenToData = false;

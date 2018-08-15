@@ -1,13 +1,14 @@
 <div class="container">
 
-  <span *ngIf="initiated"> Select stream
+  <div class="navigation" *ngIf="initiated"> Select stream
     <select name="collectionSelect"   [(ngModel)]="selectedColl" (ngModelChange)="onChange($event)">
       <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
     </select>
-  </span>
+  </div>
   <div class="navigation">
-    <span class="navDates">  <angular2-date-picker id="firstDatePicker" [(ngModel)]="firstDate" [settings]="firstSetting"></angular2-date-picker></span>
-    <span class="navDates">  <angular2-date-picker id="lastDatePicker" [(ngModel)]="lastDate" [settings]="lastSettings"></angular2-date-picker></span>
+     <b>Select time interval</b><br>
+    <span class="navDates">  <angular2-date-picker id="firstDatePicker" [(ngModel)]="firstDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="firstSettings"></angular2-date-picker></span>
+    <span class="navDates">  <angular2-date-picker id="lastDatePicker" [(ngModel)]="lastDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="lastSettings"></angular2-date-picker></span>
   </div>
   <!-- https://angular-maps.com/ -->
   <div class="info">
