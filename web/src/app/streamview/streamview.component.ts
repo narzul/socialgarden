@@ -109,9 +109,7 @@ export class StreamviewComponent implements OnInit {
   }
 
   constructor(private http: HttpClient) { }
-
   listenForNewData(value) {
-
     setTimeout(() => {
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
@@ -133,12 +131,8 @@ export class StreamviewComponent implements OnInit {
               });
 
             }
-
             this.chart.update();
           }
-
-
-
         }
         if (!this.listenToData) {
           return;
@@ -146,7 +140,6 @@ export class StreamviewComponent implements OnInit {
         if (this.listenToData) {
           return this.globalFunc = this.listenForNewData(value);
         }
-
       });
     }, 500);
   }
@@ -204,9 +197,6 @@ export class StreamviewComponent implements OnInit {
   }
 
   populateData(value) {
-    var promise = new Promise((resolve, reject) => {
-      setTimeout(() => {
-
         this.sensorCount = 0;
         for (var n = 0; n < this.streams[0].Sensor.length; n++) {
           //populate datasets
@@ -224,11 +214,8 @@ export class StreamviewComponent implements OnInit {
           this.sensorCount++;
         }
         resolve();
-      }, this.testInterval);
-    });
-    promise.then(() => {
+
       this.updateGraph(value);
-    });
   }
   setConfig() {
     //// TODO: condence this. theres a lot of rendudancy
