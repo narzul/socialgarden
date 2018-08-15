@@ -7,7 +7,10 @@ header.app-header {
   max-width: 800px;
   margin:auto;
 }
-
+footer{
+  margin: auto;
+  text-align: center;
+}
 header.app-header .real-logo  {
   mix-blend-mode: multiply;
   display: inline-block;
