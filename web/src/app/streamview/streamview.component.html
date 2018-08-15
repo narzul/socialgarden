@@ -1,19 +1,14 @@
 <div class="container">
 
-  <div class="navigation" *ngIf="initiated"> Select stream
-    <select name="collectionSelect"   [(ngModel)]="selectedColl" (ngModelChange)="onChange($event)">
+  <div class="navigation" *ngIf="initiated"> Select stream<br>
+    <select name="collectionSelect" [(ngModel)]="selectedColl" (ngModelChange)="onChangeSelectedStream($event)">
       <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
     </select>
   </div>
-  <div class="navigation">
-     <b>Select time interval</b><br>
-    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="firstDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="firstSettings"></angular2-date-picker></span>
-    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="lastDate" (ngModelChange)="updateGraph(selectedColl)" [settings]="lastSettings"></angular2-date-picker></span>
-  </div>
-  <!-- https://angular-maps.com/ -->
+
   <div class="info">
     <div class="stream-info" *ngIf="initiated">
-      <h1 *ngIf="firstHeader" >{{streams[0].DeviceName}}</h1>
+      <h1 *ngIf="firstHeader">{{streams[0].DeviceName}}</h1>
       <p *ngIf="firstHeader">
         {{streams[0].Description}}
       </p>
@@ -21,26 +16,28 @@
       <b *ngIf="firstHeader">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</b>
     </div>
     <div class="stream-info" *ngIf="initiated">
+      <!-- https://angular-maps.com/ -->
       <agm-map [latitude]="lat" [longitude]="lng">
         <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
       </agm-map>
     </div>
   </div>
-  <!--<ng-datepicker [(ngModel)]="firstdate" isOpened="true"></ng-datepicker>
-  <ng-datepicker [(ngModel)]="lastdate" ></ng-datepicker>
-  -->
 
-
-  <div class="charts" *ngIf="initiated">
-    <canvas id="canvas"> {{ chart }} </canvas>
-
+  <div class="navigation">
+    <b>Select time interval</b><br>
+    <span  class="navLabel">First</span><span class="navLabel">Last</span>
+    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="firstDate" (ngModelChange)="onChangeFirstDate($event)" [settings]="firstSettings"></angular2-date-picker></span>
+    <span class="navDates">  <angular2-date-picker class="datepickers" [(ngModel)]="lastDate" (ngModelChange)="onChangeLastDate($event)"  [settings]="lastSettings"></angular2-date-picker></span>
   </div>
 
-
+  <div class="charts" >
+    <canvas id="canvas"> </canvas>
+  </div>
 
   <button class="btn btn-primary details" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     See detailed data
   </button>
+
   <div class="collapse" id="collapseExample">
     <div class="well">
       <table class="table">
@@ -50,13 +47,12 @@
             <th>TimeStamp</th>
             <th class="thcent">Sensor</th>
             <th class="thcent">Value</th>
-
           </tr>
         </thead>
+
         <tbody>
           <tr *ngFor="let dev of streams;  let i = index">
             <td>{{i+1}}</td>
-
             <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
             <td>
               <li *ngFor="let sens of dev.Sensor">
@@ -68,7 +64,7 @@
             <td>
               <li *ngFor="let sens of dev.Sensor">
                 <ul>
-                   {{sens.Value}}
+                  {{sens.Value}}
                 </ul>
               </li>
             </td>
@@ -77,7 +73,5 @@
       </table>
     </div>
   </div>
-
-
 
 </div>

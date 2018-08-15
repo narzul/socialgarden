@@ -93,7 +93,7 @@ export class StreamviewComponent implements OnInit {
   }
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
-  testInterval: number = 1000;
+  testInterval: number = 500;
 
     firstSettings = {
         bigBanner: true,
@@ -167,7 +167,7 @@ export class StreamviewComponent implements OnInit {
         this.generateLabels(value);
         this.initiated = true;
         resolve();
-      }, 500);
+      }, this.testInterval);
     });
     return promise;
   }
@@ -190,7 +190,7 @@ export class StreamviewComponent implements OnInit {
         }
         this.populateData(value);
         resolve();
-      }, 500);
+      }, this.testInterval);
     });
     return promise;
   }
@@ -288,11 +288,19 @@ export class StreamviewComponent implements OnInit {
     this.listenToData = true;
   }
 
-  onChange(value) {
+  onChangeSelectedStream(value) {
     this.listenToData = false;
+    this.selectedColl = value;
     this.getData(value);
   }
-
+  onChangeFirstDate(firstDate){
+    this.chart.config.options.scales.xAxes[0].ticks.min = this.firstDate;
+    this.updateGraph(this.selectedColl);
+  }
+  onChangeLastDate(lastDate){
+    this.chart.config.options.scales.xAxes[0].ticks.max = this.lastDate;
+    this.updateGraph(this.selectedColl);
+  }
   ngOnInit() {
     //Get list of streams, for dropdown menu
     this.http.get('/devices/collection/list').subscribe(collectionList => {
@@ -303,7 +311,7 @@ export class StreamviewComponent implements OnInit {
     //init graph
     setTimeout(() => {
       this.getData(this.collections[0]);
-    }, 500);
+    }, this.testInterval);
   }
   ngAfterViewInit() {
     this.chart = new Chart('canvas', this.config);

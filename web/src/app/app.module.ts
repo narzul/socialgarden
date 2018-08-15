@@ -1,7 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, ApplicationRef } from '@angular/core';
 
-
 import { AppComponent } from './app.component';
 import { CommonModule } from '@angular/common';
 
@@ -11,8 +10,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { StreamviewComponent } from './streamview/streamview.component';
 import { AgmCoreModule } from '@agm/core';
-import { NgDatepickerModule } from 'ng2-datepicker'; //delete old datepicker
-
 
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
@@ -36,8 +33,7 @@ const appRoutes: Routes = [
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyATbJTe7EUekz4op28PKbbr8UpoXhLt4c8'
     }),
-    AngularDateTimePickerModule,
-    //NgDatepickerModule, //delete old datepicker
+    AngularDateTimePickerModule, //https://www.npmjs.com/package/ng2-datepicker
     RouterModule.forRoot(
     appRoutes,
    //{ enableTracing: true } // <-- debugging purposes only
