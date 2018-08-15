@@ -38,8 +38,8 @@ export class StreamviewComponent implements OnInit {
   lastDate: Date;
 
   borderColors: any = [
-    'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
-    '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D', '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC', '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399', '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+    'rgba(255,99,132,1)','rgba(54, 162, 235, 1)','rgba(255, 206, 86, 1)','rgba(75, 192, 192, 1)','rgba(153, 102, 255, 1)','rgba(255, 159, 64, 1)',
+    '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6','#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D','#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',  '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399','#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680','#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3','#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
   ];
   config: any = {
     type: this.chartType,
@@ -67,8 +67,8 @@ export class StreamviewComponent implements OnInit {
         xAxes: [{
           ticks: {
             fontFamily: 'Raleway',
-            min: this.firstDate,
-            max: this.lastDate,
+            min:this.firstDate,
+            max:this.lastDate,
           }
         }]
       },	// Container for pan options
@@ -78,7 +78,7 @@ export class StreamviewComponent implements OnInit {
       },
       zoom: {
         enabled: true,
-        mode: 'x',
+          mode: 'x',
       },
       tooltips: {
         mode: 'point'
@@ -93,23 +93,25 @@ export class StreamviewComponent implements OnInit {
   }
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
-  testInterval: number = 100;
+  testInterval: number = 500;
 
-  firstSettings = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'HH:mm dd/MM/yy',
-    defaultOpen: false
-  }
-  lastSettings = {
-    bigBanner: true,
-    timePicker: true,
-    format: 'HH:mm dd/MM/yy',
-    defaultOpen: false
-  }
+    firstSettings = {
+        bigBanner: true,
+        timePicker: true,
+        format: 'HH:mm dd/MM/yy',
+        defaultOpen: false
+      }
+      lastSettings = {
+          bigBanner: true,
+          timePicker: true,
+          format: 'HH:mm dd/MM/yy',
+          defaultOpen: false
+        }
 
   constructor(private http: HttpClient) { }
+
   listenForNewData(value) {
+
     setTimeout(() => {
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
@@ -131,8 +133,12 @@ export class StreamviewComponent implements OnInit {
               });
 
             }
+
             this.chart.update();
           }
+
+
+
         }
         if (!this.listenToData) {
           return;
@@ -140,6 +146,7 @@ export class StreamviewComponent implements OnInit {
         if (this.listenToData) {
           return this.globalFunc = this.listenForNewData(value);
         }
+
       });
     }, 500);
   }
@@ -162,10 +169,10 @@ export class StreamviewComponent implements OnInit {
       }, this.testInterval);
     });
     promise.then(() => {
-      // successMessage is whatever we passed in the resolve(...) function above.
-      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-      this.generateLabels(value);
-    });
+  // successMessage is whatever we passed in the resolve(...) function above.
+  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+    this.generateLabels(value);
+  });
   }
 
   generateLabels(value) {
@@ -175,11 +182,11 @@ export class StreamviewComponent implements OnInit {
 
         for (var i = 0; i < this.streams.length; i++) {
           const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
-          if (i == 0) {
-            this.firstDate = new Date(myFormattedDate)
+          if(i==0){
+             this.firstDate = new Date(myFormattedDate)
           }
-          if (i == this.streams.length) {
-            this.lastDate = new Date(myFormattedDate)
+          if(i==this.streams.length){
+             this.lastDate = new Date(myFormattedDate)
           }
           this.streamLabels.push(myFormattedDate);
 
@@ -188,34 +195,32 @@ export class StreamviewComponent implements OnInit {
       }, this.testInterval);
     });
     promise.then(() => {
-      // successMessage is whatever we passed in the resolve(...) function above.
-      // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
-      this.populateData(value);
-
-    });
+  // successMessage is whatever we passed in the resolve(...) function above.
+  // It doesn't have to be a string, but if it is only a succeed message, it probably will be.
+    this.generateLabels(value);
+  });
     //return promise;
   }
 
   populateData(value) {
-        this.sensorCount = 0;
-        for (var n = 0; n < this.streams[0].Sensor.length; n++) {
-          //populate datasets
-          let sensorData = {
-            "label": this.streams[0].Sensor[n].Name,
-            "borderColor": this.borderColors[n],
-            "data": [],
-          }
-          //retrieve data from each individual datapoint in stream
-          for (var m = 0; m < this.streams.length; m++) {
-            sensorData.data.push(this.streams[m].Sensor[n].Value)
-          }
+    this.sensorCount = 0;
+    for (var n = 0; n < this.streams[0].Sensor.length; n++) {
+      //populate datasets
+      let sensorData = {
+        "label": this.streams[0].Sensor[n].Name,
+        "borderColor": this.borderColors[n],
+        "data": [],
+      }
+      //retrieve data from each individual datapoint in stream
+      for (var m = 0; m < this.streams.length; m++) {
+        sensorData.data.push(this.streams[m].Sensor[n].Value)
+      }
 
-          this.dataSet.push(sensorData);
-          this.sensorCount++;
-        }
-        resolve();
+      this.dataSet.push(sensorData);
+      this.sensorCount++;
+    }
 
-      this.updateGraph(value);
+    this.updateGraph(value);
   }
   setConfig() {
     //// TODO: condence this. theres a lot of rendudancy
@@ -239,14 +244,14 @@ export class StreamviewComponent implements OnInit {
           yAxes: [{
             ticks: {
               fontFamily: 'Raleway',
-              beginAtZero: true
+              beginAtZero:true
             }
           }],
           xAxes: [{
             ticks: {
               fontFamily: 'Raleway',
-              min: this.firstDate,
-              max: this.lastDate,
+              min:this.firstDate,
+              max:this.lastDate,
             }
           }]
         },	// Container for pan options
@@ -295,11 +300,11 @@ export class StreamviewComponent implements OnInit {
     this.selectedColl = value;
     this.getData(value);
   }
-  onChangeFirstDate(firstDate) {
+  onChangeFirstDate(firstDate){
     this.chart.config.options.scales.xAxes[0].ticks.min = this.firstDate;
     this.updateGraph(this.selectedColl);
   }
-  onChangeLastDate(lastDate) {
+  onChangeLastDate(lastDate){
     this.chart.config.options.scales.xAxes[0].ticks.max = this.lastDate;
     this.updateGraph(this.selectedColl);
   }
