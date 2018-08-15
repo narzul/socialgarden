@@ -5,7 +5,10 @@
       <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
     </select>
   </span>
-
+  <div class="navigation">
+    <span class="navDates">  <angular2-date-picker id="firstDatePicker" [(ngModel)]="firstDate" [settings]="firstSetting"></angular2-date-picker></span>
+    <span class="navDates">  <angular2-date-picker id="lastDatePicker" [(ngModel)]="lastDate" [settings]="lastSettings"></angular2-date-picker></span>
+  </div>
   <!-- https://angular-maps.com/ -->
   <div class="info">
     <div class="stream-info" *ngIf="initiated">
@@ -22,16 +25,14 @@
       </agm-map>
     </div>
   </div>
+  <!--<ng-datepicker [(ngModel)]="firstdate" isOpened="true"></ng-datepicker>
+  <ng-datepicker [(ngModel)]="lastdate" ></ng-datepicker>
+  -->
+
 
   <div class="charts" *ngIf="initiated">
     <canvas id="canvas"> {{ chart }} </canvas>
-    <div class="navigation">
-      <span *ngIf="zoomed" class="navbtn" id="panleft" (click)="panLeft()">left</span>
-      <span class="navbtn" id="zoomout" (click)="zoomOut()">-</span>
-      <span *ngIf="zoomed" class="navbtn" id="reset" (click)="resetZoom()">reset</span>
-      <span class="navbtn" id="zoomin" (click)="zoomIn()">+</span>
-      <span *ngIf="zoomed" class="navbtn" id="panright" (click)="panRight()">right</span>
-    </div>
+
   </div>
 
 

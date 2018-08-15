@@ -6,7 +6,7 @@ import { environment } from './environments/environment';
 
 if (environment.production) {
   //TODO reenable enableProdMode
-  //enableProdMode();
+  enableProdMode();
 }
 
 platformBrowserDynamic().bootstrapModule(AppModule)

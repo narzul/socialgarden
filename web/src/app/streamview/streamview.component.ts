@@ -3,6 +3,11 @@ import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
+
+import { DatepickerOptions } from 'ng2-datepicker';
+import * as frLocale from 'date-fns/locale/fr';
+
+
 @Component({
   selector: 'app-streamview',
   templateUrl: './streamview.component.html',
@@ -16,9 +21,9 @@ export class StreamviewComponent implements OnInit {
   streamName: String;
   collections: any;
   selectedColl: null;
-  zoomed: boolean = false;
-  zoomCount: number = 0;
-  //  tempStream: any;
+
+
+  tempStream: any;
   tempData: any;
   pipe = new DatePipe('en-EU'); // Use your own locale
   globalFunc: any;
@@ -64,23 +69,12 @@ export class StreamviewComponent implements OnInit {
         }]
       },	// Container for pan options
       pan: {
-        // Boolean to enable panning
         enabled: true,
-
-        // Panning directions. Remove the appropriate direction to disable
-        // Eg. 'y' would only allow panning in the y direction
         mode: 'x',
-
-        speed: 1
       },
-
-      // Container for zoom options
       zoom: {
-        // Boolean to enable zooming
         enabled: true,
-        // Zooming directions. Remove the appropriate direction to disable
-        // Eg. 'y' would only allow zooming in the y direction
-        mode: 'x',
+          mode: 'x',
       },
       tooltips: {
         mode: 'point'
@@ -96,6 +90,21 @@ export class StreamviewComponent implements OnInit {
   chart: Chart = []; // This will hold our chart meta info
   firstHeader: string = null;
   testInterval: number = 1000;
+  firstDate: Date;
+  lastDate: Date = new Date();
+
+    firstSetting = {
+        bigBanner: true,
+        timePicker: true,
+        format: 'HH:mm dd/MM/yy',
+        defaultOpen: false
+      }
+      lastSettings = {
+          bigBanner: true,
+          timePicker: true,
+          format: 'HH:mm dd/MM/yy',
+          defaultOpen: true
+        }
 
   constructor(private http: HttpClient) { }
 
@@ -167,11 +176,13 @@ export class StreamviewComponent implements OnInit {
 
         for (var i = 0; i < this.streams.length; i++) {
           const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
+          if(i==0){
+             this.firstDate = new Date(myFormattedDate)
+          }
           this.streamLabels.push(myFormattedDate);
 
-          //this.streamLabels.push(this.streams[i].createdAt);
         }
-        //this.streamLabels.sort();
+        this.streamLabels.sort();
         this.populateData(value);
         resolve();
       }, 500);
@@ -272,40 +283,7 @@ export class StreamviewComponent implements OnInit {
 
 
 
-  zoomIn() {
-    this.zoomCount++;
-    alert("zoomIn " + this.zoomCount);
-    if (this.zoomCount != 0) {
-      this.zoomed = true;
-    } else {
-      this.zoomed = false;
-    }
-  }
-  zoomOut() {
-    this.zoomCount--;
-    alert("zoomOut " + this.zoomCount);
-    if (this.zoomCount === 0) {
-      this.zoomed = false;
-    } else {
-      this.zoomed = true;
-    }
-    this.chart.update();
 
-  }
-  resetZoom() {
-    this.zoomCount = 0;
-    this.zoomed = false;
-    alert("resetZoom");
-    this.chart.update();
-  }
-  panLeft() {
-    alert("panLeft");
-    this.chart.update();
-  }
-  panRight() {
-    alert("panRight");
-    this.chart.update();
-  }
 
   onChange(value) {
     this.listenToData = false;

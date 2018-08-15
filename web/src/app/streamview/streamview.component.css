@@ -2,6 +2,10 @@
   max-width: 600px;
   max-height: 400px;
 }
+.navDates{
+  width:50%;
+  float:left;
+}
 th{
   text-align: left;
 }
