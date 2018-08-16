@@ -23,9 +23,7 @@ router.get('/:DeviceName', function(req, res, next) {
 	});
 });
 
-
-
-
+//Looking up last item added to the collectiion
 router.get('/:DeviceName/:one', function(req, res, next) {
 	var DeviceName = req.params.DeviceName;
 	var paramTwo = req.params.one;
@@ -43,6 +41,7 @@ router.get('/:DeviceName/:one', function(req, res, next) {
 			_id: -1
 		}).limit(1);
 	}
+	//delete collection by name of 
 	if (paramTwo == "delete") {
 		mongoose.connection.collections[DeviceName].drop(function(err) {
 			console.log('collection dropped');
@@ -63,13 +62,8 @@ router.get('/:DeviceName/:one', function(req, res, next) {
 				res.json(coll);
 			}
 		});
-
-
 	}
-
 });
-
-
 
 
 router.post('/', function(req, res, next) {
@@ -79,10 +73,5 @@ router.post('/', function(req, res, next) {
 		res.json(post);
 	});
 });
-//
-// router.delete('/:DeviceName', function(req, res, next) {
-// 	StreamSchema = mongoose.model(req.params.DeviceName, Schema);
-// 	StreamSchema.collection.drop();
-// });
 
 module.exports = router;

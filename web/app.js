@@ -11,6 +11,7 @@ var app = express();
 var mongoose = require('mongoose');
 
 //Main app. this file is uing express to route, and mongoose for database.
+//routes can be found in /routes/devices.js
 mongoose.Promise = require('bluebird');
 mongoose.connect('mongodb://localhost:27017/REALlab', {
 		useNewUrlParser: true
