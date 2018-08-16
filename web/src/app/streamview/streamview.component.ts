@@ -4,7 +4,7 @@ import { Chart } from 'chart.js';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { DatepickerOptions } from 'ng2-datepicker';
-import * as frLocale from 'date-fns/locale/fr';
+//import * as frLocale from 'date-fns/locale/fr';
 
 //// TODO: The strengh of Angular comes, in part from its strong use of components. This component could be split into smaller once, which would be benificial in regards to readablity.
 @Component({
@@ -83,19 +83,24 @@ export class StreamviewComponent implements OnInit {
   // Populate graph sequence step 2
   generateLabels(value) {
     this.streamLabels = [];
-      //Using promises for flowcontrow
+    //Using promises for flowcontrow
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
 
         for (var i = 0; i < this.streams.length; i++) {
-          const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
-          if (i == 0) {
-            this.firstDate = new Date(myFormattedDate)
+          try {
+            const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
+            if (i == 0) {
+              this.firstDate = new Date(myFormattedDate)
+            }
+            if (i == this.streams.length) {
+              this.lastDate = new Date(myFormattedDate)
+            }
+            this.streamLabels.push(myFormattedDate);
           }
-          if (i == this.streams.length) {
-            this.lastDate = new Date(myFormattedDate)
+          catch (e) {
+            console.log('Formatting Date Error:', e);
           }
-          this.streamLabels.push(myFormattedDate);
 
         }
         resolve();
@@ -144,7 +149,6 @@ export class StreamviewComponent implements OnInit {
 
   //Populate graph sequence step 5
   setConfig() {
-    //// TODO: condence this. theres a lot of rendudancy
     this.chartConfig = {
       type: this.chartType,
       data: {
@@ -176,22 +180,6 @@ export class StreamviewComponent implements OnInit {
             }
           }]
         },	// Container for pan options
-        pan: {
-          // Boolean to enable panning
-          enabled: true,
-          // Panning directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow panning in the y direction
-          mode: 'x',
-        },
-
-        // Container for zoom options
-        zoom: {
-          // Boolean to enable zooming
-          enabled: true,
-          // Zooming directions. Remove the appropriate direction to disable
-          // Eg. 'y' would only allow zooming in the y direction
-          mode: 'x',
-        },
         tooltips: {
           mode: 'point'
         }, title: {
@@ -207,7 +195,8 @@ export class StreamviewComponent implements OnInit {
   }
   //Populate graph sequence step 6 - Listen to new incomming data
   listenForNewData(value) {
-  //// TODO:  This listener, can be re-written to a service.  In order to do this, the variables which it interact with should be stored in the root scope. i.e. app.component.ts for easier message parsing. This method should thus be stored in stream.service.ts
+    //// TODO:  This listener, can be re-written to a service.  In order to do this, the variables which it interact with should be stored in the root scope. i.e. app.component.ts for easier message parsing. This method should thus be stored in stream.service.ts
+    //// TODO: This would also make the application run in parrallel, since each javascript component is parrallized as default.
     setTimeout(() => { //Listen for new data every 500 ms,
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
@@ -266,7 +255,6 @@ export class StreamviewComponent implements OnInit {
       this.collections.sort();
       this.selectedColl = this.collections[0];
     });
-
     //init graph
     setTimeout(() => { //// TODO: perhaps a if statement which checks if things has loaded is better
       this.getData(this.collections[0]);
