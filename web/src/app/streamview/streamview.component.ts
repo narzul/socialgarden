@@ -34,7 +34,7 @@ export class StreamviewComponent implements OnInit {
   chartConfig: any;
 
   //  tempStream: any;
-  pipe = new DatePipe('en-EU'); //DatePipe for setting date format
+  pipe = new DatePipe('en-UK'); //DatePipe for setting date format
   listenerWrapperFunction: any;
 
   tempData: any;
