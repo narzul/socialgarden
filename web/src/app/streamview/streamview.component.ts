@@ -20,7 +20,7 @@ export class StreamviewComponent implements OnInit {
   streamName: String;
   collections: any;
   selectedColl: null;
-  firstHeader: string = null;
+  streamHeaderTxt: string = null;
   testInterval: number = 500;
 
   chartType: String = 'line';
@@ -38,7 +38,6 @@ export class StreamviewComponent implements OnInit {
   listenerWrapperFunction: any;
 
   tempData: any;
-  title: string = 'My first AGM project';
   lat: number = 55;
   lng: number = 12;
   sensorCount: number = 0;
@@ -51,8 +50,6 @@ export class StreamviewComponent implements OnInit {
     format: 'HH:mm dd/MM/yy',
     defaultOpen: false
   }
-
-
 
 
 
@@ -70,7 +67,7 @@ export class StreamviewComponent implements OnInit {
           this.streams = data;
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
-          this.firstHeader = this.streams[0].DeviceName;
+          this.streamHeaderTxt = this.streams[0].DeviceName;
         });
         this.initiated = true;
         resolve();
@@ -271,7 +268,9 @@ export class StreamviewComponent implements OnInit {
     });
 
     //init graph
-    this.getData(this.collections[0]);
+    setTimeout(() => { //// TODO: perhaps a if statement which checks if things has loaded is better
+      this.getData(this.collections[0]);
+    }, 500);
   }
   ngAfterViewInit() {
     this.chart = new Chart('canvas', this.chartConfig);

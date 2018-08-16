@@ -8,12 +8,12 @@
 
   <div class="info">
     <div class="stream-info" *ngIf="initiated">
-      <h1 *ngIf="firstHeader">{{streams[0].DeviceName}}</h1>
-      <p *ngIf="firstHeader">
+      <h1 *ngIf="streamHeaderTxt">{{streams[0].DeviceName}}</h1>
+      <p *ngIf="streamHeaderTxt">
         {{streams[0].Description}}
       </p>
       <br>
-      <b *ngIf="firstHeader">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</b>
+      <b *ngIf="streamHeaderTxt">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</b>
     </div>
     <div class="stream-info" *ngIf="initiated">
       <!-- https://angular-maps.com/ -->
