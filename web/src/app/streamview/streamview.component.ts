@@ -44,8 +44,8 @@ export class StreamviewComponent implements OnInit {
 
   firstDate: any;
   lastDate: any;
-  timeDiff: number;
-  typeUnit:String;
+  timeDiff: number = 3600001; //default timediff set to days
+  typeUnit: String;
   datepickerSettings = { //Settings for datepickers
     bigBanner: true,
     timePicker: true,
@@ -106,9 +106,38 @@ export class StreamviewComponent implements OnInit {
           }
 
         }
-      //  this.timeDiff = Math.abs(parseInt(this.firstDate) - parseInt(this.lastDate)) / 36e5;
-        this.timeDiff =3600001;
-        console.log("timediff in hours " +   this.timeDiff );
+
+
+
+        //TODO the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
+        const start = new Date(this.firstDate).getTime();
+        const end = new Date(this.lastDate).getTime();
+
+        const diff = end - start;
+
+        console.log("timediff in hours " + diff + " " + this.timeDiff);
+
+        //SELECT unitType based on timediff between first and last date
+        if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
+          this.typeUnit = 'week';
+        }
+        if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
+          this.typeUnit = 'day';
+        }
+        if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
+          this.typeUnit = 'hour';
+        }
+        if (this.timeDiff < 60000 && this.timeDiff > 1000) {
+          this.typeUnit = 'minute';
+        }
+        if (this.timeDiff < 1000 && this.timeDiff > 100) {
+          this.typeUnit = 'second';
+        }
+        if (this.timeDiff < 100) {
+          this.typeUnit = 'millisecond';
+        }
+
+
         resolve();
       }, this.testInterval);
     });
@@ -156,26 +185,6 @@ export class StreamviewComponent implements OnInit {
   //Populate graph sequence step 5
   setConfig() {
 
-    //SELECT unitType based on timediff between first and last date
-    if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
-      this.typeUnit = 'week';
-    }
-    if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
-      this.typeUnit = 'day';
-    }
-    if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
-      this.typeUnit = 'hour';
-    }
-    if (this.timeDiff < 60000 && this.timeDiff > 1000) {
-      this.typeUnit = 'minute';
-    }
-    if (this.timeDiff < 1000 && this.timeDiff > 100) {
-      this.typeUnit = 'second';
-    }
-    if (this.timeDiff < 100) {
-      this.typeUnit = 'millisecond';
-    }
-
     this.chartConfig = {
       type: this.chartType,
       data: {
@@ -185,8 +194,8 @@ export class StreamviewComponent implements OnInit {
       options: {
         responsive: true,
         title: {
-          //  display: true,
-          text: this.selectedColl,
+          display: true,
+          text: 'timeUnit ' + this.typeUnit,
           fontFamily: 'Raleway',
         },
         events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
