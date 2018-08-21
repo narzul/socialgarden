@@ -42,8 +42,10 @@ export class StreamviewComponent implements OnInit {
   lng: number = 12;
   sensorCount: number = 0;
 
-  firstDate: Date;
-  lastDate: Date;
+  firstDate: any;
+  lastDate: any;
+  timeDiff: number;
+  typeUnit:String;
   datepickerSettings = { //Settings for datepickers
     bigBanner: true,
     timePicker: true,
@@ -93,10 +95,10 @@ export class StreamviewComponent implements OnInit {
             const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
-            }
-            if (i == this.streams.length) {
+            } else if (i == this.streams.length) {
               this.lastDate = new Date(myFormattedDate)
             }
+
             this.streamLabels.push(myFormattedDate);
           }
           catch (e) {
@@ -104,6 +106,9 @@ export class StreamviewComponent implements OnInit {
           }
 
         }
+      //  this.timeDiff = Math.abs(parseInt(this.firstDate) - parseInt(this.lastDate)) / 36e5;
+        this.timeDiff =3600001;
+        console.log("timediff in hours " +   this.timeDiff );
         resolve();
       }, this.testInterval);
     });
@@ -150,6 +155,27 @@ export class StreamviewComponent implements OnInit {
 
   //Populate graph sequence step 5
   setConfig() {
+
+    //SELECT unitType based on timediff between first and last date
+    if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
+      this.typeUnit = 'week';
+    }
+    if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
+      this.typeUnit = 'day';
+    }
+    if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
+      this.typeUnit = 'hour';
+    }
+    if (this.timeDiff < 60000 && this.timeDiff > 1000) {
+      this.typeUnit = 'minute';
+    }
+    if (this.timeDiff < 1000 && this.timeDiff > 100) {
+      this.typeUnit = 'second';
+    }
+    if (this.timeDiff < 100) {
+      this.typeUnit = 'millisecond';
+    }
+
     this.chartConfig = {
       type: this.chartType,
       data: {
@@ -159,7 +185,7 @@ export class StreamviewComponent implements OnInit {
       options: {
         responsive: true,
         title: {
-          display: true,
+          //  display: true,
           text: this.selectedColl,
           fontFamily: 'Raleway',
         },
@@ -181,23 +207,25 @@ export class StreamviewComponent implements OnInit {
             type: 'time',
             display: true,
             scaleLabel: {
-              display: true,
+              //  display: true,
               labelString: 'Date'
             },
 
             time: {
-              unit: 'day',
+              unit: this.typeUnit,
               distribution: 'series',
               displayFormats: {
-                day: 'hh:mm: a DD/MM/YYYY'
+                day: 'hh:mm DD/MM/YY',
               }
-
 
             },
             ticks: {
               fontFamily: 'Raleway',
-              //min: this.firstDate,
-            //  max: this.lastDate,
+              min: this.firstDate,
+              max: this.lastDate,
+            },
+            scale: {
+              bounds: 'data'
             }
           }]
         },	// Container for pan options
@@ -264,11 +292,13 @@ export class StreamviewComponent implements OnInit {
   onChangeFirstDate(firstDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
     this.chart.config.options.scales.xAxes[0].ticks.min = this.firstDate;
+    console.log(this.firstDate);
     this.updateGraph(this.selectedColl);
   }
   onChangeLastDate(lastDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
     this.chart.config.options.scales.xAxes[0].ticks.max = this.lastDate;
+    console.log(this.lastDate);
     this.updateGraph(this.selectedColl);
   }
 
