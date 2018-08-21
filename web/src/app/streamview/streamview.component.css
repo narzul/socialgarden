@@ -127,6 +127,18 @@ option{
     height:100vh;
 
   }
+
+  .details{
+    width:100%;
+    margin:10px 0;
+  }
+  .well{
+    padding:10px;
+  }
+  th:last-child{
+    right: 5px;
+    position: relative;
+  }
 }
 
 @media (min-width: 800px) {
