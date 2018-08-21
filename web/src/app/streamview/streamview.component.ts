@@ -6,7 +6,7 @@ import { DatePipe } from '@angular/common';
 import { DatepickerOptions } from 'ng2-datepicker';
 //import * as frLocale from 'date-fns/locale/fr';
 
-//// TODO: The strengh of Angular comes, in part from its strong use of components. This component could be split into smaller once, which would be benificial in regards to readablity.
+// TODO: The strengh of Angular comes, in part from its strong use of components. This component could be split into smaller once, which would be benificial in regards to readablity.
 @Component({
   selector: 'app-streamview',
   templateUrl: './streamview.component.html',
@@ -89,7 +89,8 @@ export class StreamviewComponent implements OnInit {
 
         for (var i = 0; i < this.streams.length; i++) {
           try {
-            const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
+            //const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
+            const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
             }
@@ -156,8 +157,12 @@ export class StreamviewComponent implements OnInit {
         datasets: this.dataSet
       },
       options: {
-
-        text: this.selectedColl,
+        responsive: true,
+        title: {
+          display: true,
+          text: this.selectedColl,
+          fontFamily: 'Raleway',
+        },
         events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
         legend: {
           display: true,
@@ -173,19 +178,34 @@ export class StreamviewComponent implements OnInit {
             }
           }],
           xAxes: [{
+            type: 'time',
+            display: true,
+            scaleLabel: {
+              display: true,
+              labelString: 'Date'
+            },
+
+            time: {
+              unit: 'day',
+              distribution: 'series',
+              displayFormats: {
+                day: 'hh:mm: a DD/MM/YYYY'
+              }
+
+
+            },
             ticks: {
               fontFamily: 'Raleway',
-              min: this.firstDate,
-              max: this.lastDate,
+              //min: this.firstDate,
+            //  max: this.lastDate,
             }
           }]
         },	// Container for pan options
         tooltips: {
-          mode: 'point'
-        }, title: {
-          display: true,
-          fontFamily: 'Raleway',
+          mode: 'nearest',
+          intersect: true,
         },
+
         animation: {
           duration: 100
         }
@@ -194,9 +214,11 @@ export class StreamviewComponent implements OnInit {
 
   }
   //Populate graph sequence step 6 - Listen to new incomming data
+  //TODO something is wrong with the ListenForNewData function. The data is updating incorrectly on the website
   listenForNewData(value) {
-    //// TODO:  This listener, can be re-written to a service.  In order to do this, the variables which it interact with should be stored in the root scope. i.e. app.component.ts for easier message parsing. This method should thus be stored in stream.service.ts
-    //// TODO: This would also make the application run in parrallel, since each javascript component is parrallized as default.
+    // TODO:  This listener, can be re-written to a service.  In order to do this, the variables which it interact with should be stored in the root scope. i.e. app.component.ts for easier message parsing. This method should thus be stored in stream.service.ts
+    // TODO: This would also make the application run in parrallel, since each javascript component is parrallized as default.
+
     setTimeout(() => { //Listen for new data every 500 ms,
       //Get last data from device stream
       this.http.get('/devices/' + value + '/one').subscribe(data => {
@@ -205,15 +227,18 @@ export class StreamviewComponent implements OnInit {
           this.streams.push(data);
 
           //CHECK IF DATAPOINT HAVE DIFFERENT TIMESTAMP THEN THE PREVIEOUS ONE
-          const myFormattedDate = this.pipe.transform(this.streams[this.streams.length - 1].createdAt, 'HH:mm dd/MM/yy');
+          //const myFormattedDate = this.pipe.transform(this.streams[this.streams.length - 1].createdAt, 'HH:mm dd/MM/yy');
+          const myFormattedDate = this.streams[this.streams.length - 1].createdAt;
           if (this.chart.data.labels[this.chart.data.labels.length] !== myFormattedDate) {
             //PUSH NEW LABELS
             this.chart.data.labels.push(myFormattedDate);
             //PUSH DATA FOR EACH SENSOR
             for (var n = 0; n < this.tempData.Sensor.length; n++) {
+
               this.chart.data.datasets.forEach((dataset) => {
                 dataset.data.push(this.tempData.Sensor[n].Value);
               });
+
             }
             this.chart.update();
           }
@@ -256,7 +281,7 @@ export class StreamviewComponent implements OnInit {
       this.selectedColl = this.collections[0];
     });
     //init graph
-    setTimeout(() => { //// TODO: perhaps a if statement which checks if things has loaded is better
+    setTimeout(() => { // TODO: perhaps a if statement which checks if things has loaded is better
       this.getData(this.collections[0]);
     }, 500);
   }
