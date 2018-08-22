@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { DatepickerOptions } from 'ng2-datepicker';
 //import * as frLocale from 'date-fns/locale/fr';
+import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 // TODO: The strengh of Angular comes, in part from its strong use of components. This component could be split into smaller once, which would be benificial in regards to readablity.
 @Component({
@@ -42,15 +42,16 @@ export class StreamviewComponent implements OnInit {
   lng: number = 12;
   sensorCount: number = 0;
 
-  firstDate: any;
-  lastDate: any;
+  firstDate: Date;
+  lastDate: Date;
+
   timeDiff: number = 3600001; //default timediff set to days
   typeUnit: String;
   datepickerSettings = { //Settings for datepickers
     bigBanner: true,
     timePicker: true,
-    format: 'HH:mm dd/MM/yy',
-    defaultOpen: false
+    format: 'H:m d/M/yyyy',
+    defaultOpen: false,
   }
 
 
@@ -95,7 +96,8 @@ export class StreamviewComponent implements OnInit {
             const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
-            } else if (i == this.streams.length) {
+              console.log("this.firstDate" + this.firstDate);
+            } else if (i == this.streams.length-1) {
               this.lastDate = new Date(myFormattedDate)
             }
 
@@ -108,35 +110,7 @@ export class StreamviewComponent implements OnInit {
         }
 
 
-
-        //TODO the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
-        const start = new Date(this.firstDate).getTime();
-        const end = new Date(this.lastDate).getTime();
-
-        const diff = end - start;
-
-        console.log("timediff in hours " + diff + " " + this.timeDiff);
-
-        //SELECT unitType based on timediff between first and last date
-        if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
-          this.typeUnit = 'week';
-        }
-        if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
-          this.typeUnit = 'day';
-        }
-        if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
-          this.typeUnit = 'hour';
-        }
-        if (this.timeDiff < 60000 && this.timeDiff > 1000) {
-          this.typeUnit = 'minute';
-        }
-        if (this.timeDiff < 1000 && this.timeDiff > 100) {
-          this.typeUnit = 'second';
-        }
-        if (this.timeDiff < 100) {
-          this.typeUnit = 'millisecond';
-        }
-
+        this.calculateDiffBetweenTwoTimeStamps();
 
         resolve();
       }, this.testInterval);
@@ -147,6 +121,41 @@ export class StreamviewComponent implements OnInit {
     });
     return promise;
   }
+  calculateDiffBetweenTwoTimeStamps(){
+    //TODO the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
+    const start = new Date(this.firstDate).getTime();
+    const end = new Date(this.lastDate).getTime();
+    //TODO reenable timeDiff
+    this.timeDiff = end - start;
+
+    //SELECT unitType based on timediff between first and last date
+    // 604800000 = week
+    // 86400000 = day
+    // 3600000 = hours
+    if (this.timeDiff > 604800000) { // larger then a week
+      this.typeUnit = 'week';
+    }
+    //less then a week but more then a day
+    if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
+      this.typeUnit = 'day';
+    }
+    // less then a day but more then a hour
+    if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
+      this.typeUnit = 'hour';
+    }
+    // less then a hour but more then a min
+    if (this.timeDiff < 3600000  && this.timeDiff >60000) {
+      this.typeUnit = 'minute';
+    }
+    // less then a min but more then a sec
+    if (this.timeDiff < 60000 && this.timeDiff > 1000) {
+      this.typeUnit = 'second';
+    }
+    if (this.timeDiff < 1000) {
+      this.typeUnit = 'millisecond';
+    }
+  }
+
   //Populate graph sequence step 3
   populateData(value) {
     this.sensorCount = 0;
@@ -209,7 +218,6 @@ export class StreamviewComponent implements OnInit {
           yAxes: [{
             ticks: {
               fontFamily: 'Raleway',
-              beginAtZero: true
             }
           }],
           xAxes: [{
@@ -222,6 +230,8 @@ export class StreamviewComponent implements OnInit {
 
             time: {
               unit: this.typeUnit,
+              min:new Date(this.firstDate).getTime(),
+              max: new Date(this.lastDate).getTime(),
               distribution: 'series',
               displayFormats: {
                 day: 'hh:mm DD/MM/YY',
@@ -230,8 +240,6 @@ export class StreamviewComponent implements OnInit {
             },
             ticks: {
               fontFamily: 'Raleway',
-              min: this.firstDate,
-              max: this.lastDate,
             },
             scale: {
               bounds: 'data'
@@ -300,13 +308,15 @@ export class StreamviewComponent implements OnInit {
   }
   onChangeFirstDate(firstDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
-    this.chart.config.options.scales.xAxes[0].ticks.min = this.firstDate;
+    //this.chart.config.options.scales.xAxes[0].ticks.min = new Date(this.firstDate).getTime();
+    this.calculateDiffBetweenTwoTimeStamps();
     console.log(this.firstDate);
     this.updateGraph(this.selectedColl);
   }
   onChangeLastDate(lastDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
-    this.chart.config.options.scales.xAxes[0].ticks.max = this.lastDate;
+    //this.chart.config.options.scales.xAxes[0].ticks.max = new Date(this.lastDate).getTime();
+    this.calculateDiffBetweenTwoTimeStamps();
     console.log(this.lastDate);
     this.updateGraph(this.selectedColl);
   }
