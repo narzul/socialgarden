@@ -277,6 +277,7 @@ export class StreamviewComponent implements OnInit {
           if (this.chart.data.labels[this.chart.data.labels.length] !== myFormattedDate) {
             //PUSH NEW LABELS
             this.chart.data.labels.push(myFormattedDate);
+            this.lastDate = new Date(myFormattedDate)
             //PUSH DATA FOR EACH SENSOR
             for (var n = 0; n < this.tempData.Sensor.length; n++) {
 
