@@ -60,7 +60,7 @@ export class StreamviewComponent implements OnInit {
 
   // Populate graph sequence step 1
   getData(value) {
-    //Using promises for flowcontrow
+    //Using promises for flowcontrol
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
         this.dataSet = []; //Clean dataset
@@ -86,7 +86,7 @@ export class StreamviewComponent implements OnInit {
   // Populate graph sequence step 2
   generateLabels(value) {
     this.streamLabels = [];
-    //Using promises for flowcontrow
+    //Using promises for flowcontrol
     var promise = new Promise((resolve, reject) => {
       setTimeout(() => {
 
@@ -109,7 +109,7 @@ export class StreamviewComponent implements OnInit {
 
         }
 
-
+        //Initate sequence step 3
         this.calculateDiffBetweenTwoTimeStamps();
 
         resolve();
@@ -121,6 +121,8 @@ export class StreamviewComponent implements OnInit {
     });
     return promise;
   }
+
+  // Populate graph sequence step 3
   calculateDiffBetweenTwoTimeStamps(){
     //TODO the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
     const start = new Date(this.firstDate).getTime();
@@ -156,7 +158,7 @@ export class StreamviewComponent implements OnInit {
     }
   }
 
-  //Populate graph sequence step 3
+  //Populate graph sequence step 4
   populateData(value) {
     this.sensorCount = 0;
     for (var n = 0; n < this.streams[0].Sensor.length; n++) {
@@ -178,20 +180,20 @@ export class StreamviewComponent implements OnInit {
     this.updateGraph(value);
   }
 
-  //Populate graph sequence step 4
+  //Populate graph sequence step 5
   updateGraph(value) {
     // https://coursetro.com/posts/code/126/Let's-build-an-Angular-5-Chart.js-App---Tutorial
     this.chart.destroy();
     this.listenerWrapperFunction = null;
-    // Initiate Populate graph sequence step 5
+    // Initiate Populate graph sequence step 6
     this.setConfig();
     this.chart = new Chart('canvas', this.chartConfig);
-    // Initiate Populate graph sequence step 6
+    // Initiate Populate graph sequence step
     this.listenerWrapperFunction = this.listenForNewData(value);
     this.listenToData = true;
   }
 
-  //Populate graph sequence step 5
+  //Populate graph sequence step 6
   setConfig() {
 
     this.chartConfig = {
@@ -258,7 +260,7 @@ export class StreamviewComponent implements OnInit {
     };
 
   }
-  //Populate graph sequence step 6 - Listen to new incomming data
+  //Populate graph sequence step 7 - Listen to new incomming data
   //TODO something is wrong with the ListenForNewData function. The data is updating incorrectly on the website
   listenForNewData(value) {
     // TODO:  This listener, can be re-written to a service.  In order to do this, the variables which it interact with should be stored in the root scope. i.e. app.component.ts for easier message parsing. This method should thus be stored in stream.service.ts
@@ -277,7 +279,7 @@ export class StreamviewComponent implements OnInit {
           if (this.chart.data.labels[this.chart.data.labels.length] !== myFormattedDate) {
             //PUSH NEW LABELS
             this.chart.data.labels.push(myFormattedDate);
-            this.lastDate = new Date(myFormattedDate)
+
             //PUSH DATA FOR EACH SENSOR
             for (var n = 0; n < this.tempData.Sensor.length; n++) {
 
@@ -309,14 +311,14 @@ export class StreamviewComponent implements OnInit {
   }
   onChangeFirstDate(firstDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
-    //this.chart.config.options.scales.xAxes[0].ticks.min = new Date(this.firstDate).getTime();
+    //Initate sequence step 3
     this.calculateDiffBetweenTwoTimeStamps();
     console.log(this.firstDate);
     this.updateGraph(this.selectedColl);
   }
   onChangeLastDate(lastDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
-    //this.chart.config.options.scales.xAxes[0].ticks.max = new Date(this.lastDate).getTime();
+    //Initate sequence step 3
     this.calculateDiffBetweenTwoTimeStamps();
     console.log(this.lastDate);
     this.updateGraph(this.selectedColl);
