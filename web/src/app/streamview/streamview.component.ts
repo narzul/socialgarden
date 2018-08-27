@@ -13,6 +13,15 @@ import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 })
 export class StreamviewComponent implements OnInit {
+  //Current state data
+  chartConfig: any;
+  typeUnit: String;
+  listenerWrapperFunction: any;
+  tempData: any;
+  lat: number = 55;
+  lng: number = 12;
+  IsCoordsSetManually: boolean;
+  sensorCount: number = 0;
   initiated: boolean = false;
   listenToData: boolean = false;
   streams: any = [];
@@ -22,6 +31,7 @@ export class StreamviewComponent implements OnInit {
   streamHeaderTxt: string = null;
   testInterval: number = 500;
 
+  //Chart settigns
   chartType: String = 'line';
   chart: Chart = []; // This will hold our chart meta info
   dataSet = []; // Holding data for drawing into graph
@@ -33,21 +43,12 @@ export class StreamviewComponent implements OnInit {
     '#4DB3FF', '#1AB399', '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00',
     '#66E64D', '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
   ];
-  chartConfig: any;
 
+  //Datepicker settings
   pipe = new DatePipe('en-UK'); //DatePipe for setting date format
-  listenerWrapperFunction: any;
-
-  tempData: any;
-  lat: number = 55;
-  lng: number = 12;
-  sensorCount: number = 0;
-
   firstDate: Date;
   lastDate: Date;
-
   timeDiff: number = 3600001; //default timediff set to days
-  typeUnit: String;
   datepickerSettings = { //Settings for datepickers
     bigBanner: true,
     timePicker: true,
@@ -55,14 +56,14 @@ export class StreamviewComponent implements OnInit {
     defaultOpen: false,
   }
 
+  //Paggination settings
+  pagginationPageCount: number;
   pagginationManager = {
     results: [],
     page: 1,
     offset: 10,
     Math: Math
   };
-  pagginationPageCount: number;
-  IsCoordsSetManually: boolean;
   constructor(private http: HttpClient) { }
 
 
@@ -106,7 +107,7 @@ export class StreamviewComponent implements OnInit {
 
         for (var i = 0; i < this.streams.length; i++) {
           try {
-            //const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'HH:mm dd/MM/yy');
+            //const myFormattedDate = this.pipe.transform(this.streams[i].createdAt, 'H:m d/M/yyyy');
             const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
@@ -285,7 +286,7 @@ export class StreamviewComponent implements OnInit {
           this.streams.push(data);
 
           //CHECK IF DATAPOINT HAVE DIFFERENT TIMESTAMP THEN THE PREVIEOUS ONE
-          //const myFormattedDate = this.pipe.transform(this.streams[this.streams.length - 1].createdAt, 'HH:mm dd/MM/yy');
+          //const myFormattedDate = this.pipe.transform(this.streams[this.streams.length - 1].createdAt, 'H:m d/M/yyyy');
           const myFormattedDate = this.streams[this.streams.length - 1].createdAt;
           if (this.chart.data.labels[this.chart.data.labels.length] !== myFormattedDate) {
             //PUSH NEW LABELS
