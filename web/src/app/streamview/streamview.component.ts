@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { Chart } from 'chart.js';
 import { Pipe, PipeTransform } from '@angular/core';
 import { DatePipe } from '@angular/common';
-//import * as frLocale from 'date-fns/locale/fr';
 import { AngularDateTimePickerModule } from 'angular2-datetimepicker';
 
 // TODO: The strengh of Angular comes, in part from its strong use of components. This component could be split into smaller once, which would be benificial in regards to readablity.
@@ -27,13 +26,15 @@ export class StreamviewComponent implements OnInit {
   chart: Chart = []; // This will hold our chart meta info
   dataSet = []; // Holding data for drawing into graph
   streamLabels = [];
-  borderColors: any = [ //Array containing possible colors for line chart.
+  borderColors: any = [
     'rgba(255,99,132,1)', 'rgba(54, 162, 235, 1)', 'rgba(255, 206, 86, 1)', 'rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)', 'rgba(255, 159, 64, 1)',
-    '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D', '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC', '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399', '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+    '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D', '#80B300', '#809900', '#E6B3B3', '#6680B3',
+    '#66991A', '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC', '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', '#66664D', '#991AFF', '#E666FF',
+    '#4DB3FF', '#1AB399', '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933', '#FF3380', '#CCCC00',
+    '#66E64D', '#4D80CC', '#9900B3', '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
   ];
   chartConfig: any;
 
-  //  tempStream: any;
   pipe = new DatePipe('en-UK'); //DatePipe for setting date format
   listenerWrapperFunction: any;
 
@@ -54,9 +55,16 @@ export class StreamviewComponent implements OnInit {
     defaultOpen: false,
   }
 
-
-
+  tableManager = {
+    results: [],
+    page: 1,
+    offset: 20,
+    Math: Math
+  };
+  pagginationPageCount:number;
   constructor(private http: HttpClient) { }
+
+
 
   // Populate graph sequence step 1
   getData(value) {
@@ -68,6 +76,8 @@ export class StreamviewComponent implements OnInit {
 
         this.http.get('/devices/' + value).subscribe(data => {
           this.streams = data;
+          this.tableManager.results = this.streams;
+          this.pagginationPageCount = Math.ceil(this.streams.length / this.tableManager.offset);
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
           this.streamHeaderTxt = this.streams[0].DeviceName;
@@ -96,7 +106,6 @@ export class StreamviewComponent implements OnInit {
             const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
-              console.log("this.firstDate" + this.firstDate);
             } else if (i == this.streams.length-1) {
               this.lastDate = new Date(myFormattedDate)
             }
@@ -124,12 +133,10 @@ export class StreamviewComponent implements OnInit {
 
   // Populate graph sequence step 3
   calculateDiffBetweenTwoTimeStamps(){
-    //TODO the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
+    //the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
     const start = new Date(this.firstDate).getTime();
     const end = new Date(this.lastDate).getTime();
-    //TODO reenable timeDiff
     this.timeDiff = end - start;
-
     //SELECT unitType based on timediff between first and last date
     // 604800000 = week
     // 86400000 = day
@@ -313,14 +320,12 @@ export class StreamviewComponent implements OnInit {
     this.listenToData = false; //Stop listener while getting new dataStream
     //Initate sequence step 3
     this.calculateDiffBetweenTwoTimeStamps();
-    console.log(this.firstDate);
     this.updateGraph(this.selectedColl);
   }
   onChangeLastDate(lastDate) {
     this.listenToData = false; //Stop listener while getting new dataStream
     //Initate sequence step 3
     this.calculateDiffBetweenTwoTimeStamps();
-    console.log(this.lastDate);
     this.updateGraph(this.selectedColl);
   }
 

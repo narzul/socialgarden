@@ -28,15 +28,28 @@
     <span class="navDates"><angular2-date-picker class="datepickers" [(ngModel)]="lastDate" (ngModelChange)="onChangeLastDate($event)"  [settings]="datepickerSettings"></angular2-date-picker></span>
   </div>
 
-  <div class="charts" >
+  <div class="charts">
     <canvas id="canvas"> </canvas>
   </div>
+
+
 
   <button class="btn btn-primary details" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
     See detailed data
   </button>
 
   <div class="collapse" id="collapseExample">
+    <span class="pagi-grp">
+    <div class="btn-group">
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page === 1" (click)="tableManager.page = 1">&laquo;</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page === 1" (click)="tableManager.page = tableManager.page === 1 ? 1 : tableManager.page - 1"><</button>
+      <button class="btn btn-default" style="color: #337ab7;">{{tableManager.page}} / {{pagginationPageCount}}</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page >= (tableManager.results.length / tableManager.offset)" (click)="tableManager.page = tableManager.page >= (tableManager.results.length / tableManager.offset) ? tableManager.Math.ceil(tableManager.results.length / tableManager.offset) : tableManager.page + 1">></button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page >= (tableManager.results.length / tableManager.offset)" (click)="tableManager.page = tableManager.Math.ceil(tableManager.results.length / tableManager.offset)">&raquo;</button>
+    </div>
+  </span>
+
+
     <div class="well">
       <table class="table">
         <thead>
@@ -49,9 +62,11 @@
         </thead>
 
         <tbody>
-          <tr *ngFor="let dev of streams;  let i = index">
-            <td>{{i+1}}</td>
-            <td>{{dev.createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</td>
+
+          <tr *ngFor="let dev of tableManager.results.slice((tableManager.page - 1) * tableManager.offset, tableManager.page * tableManager.offset);  let i = index">
+            <!-- <tr *ngFor="let dev of streams;  let i = index"> -->
+            <td>{{(i+1)*tableManager.page}}</td>
+            <td>{{dev.createdAt | date:"HH:mm:ss d/m/yyyy"}}</td>
             <td>
               <li *ngFor="let sens of dev.Sensor">
                 <ul>
@@ -70,6 +85,17 @@
         </tbody>
       </table>
     </div>
+    <span class="pagi-grp">
+    <div class="btn-group">
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page === 1" (click)="tableManager.page = 1">&laquo;</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page === 1" (click)="tableManager.page = tableManager.page === 1 ? 1 : tableManager.page - 1"><</button>
+      <button class="btn btn-default" style="color: #337ab7;">{{tableManager.page}} / {{pagginationPageCount}}</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page >= (tableManager.results.length / tableManager.offset)" (click)="tableManager.page = tableManager.page >= (tableManager.results.length / tableManager.offset) ? tableManager.Math.ceil(tableManager.results.length / tableManager.offset) : tableManager.page + 1">></button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="tableManager.page >= (tableManager.results.length / tableManager.offset)" (click)="tableManager.page = tableManager.Math.ceil(tableManager.results.length / tableManager.offset)">&raquo;</button>
+    </div>
+</span>
+
+
   </div>
 
 </div>

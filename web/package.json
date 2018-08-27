@@ -25,7 +25,6 @@
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.2",
     "chart.js": "^2.7.2",
-    "chartjs-plugin-zoom": "^0.6.3",
     "consolidate": "^0.15.1",
     "core-js": "^2.5.7",
     "d3": "^5.5.0",
