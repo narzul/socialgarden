@@ -9,7 +9,8 @@ var StreamSchema = new mongoose.Schema({
 	"Description": String,
 	"Location": {
 		"Latitude": String,
-		"Longitude": String
+		"Longitude": String,
+		"ManuallyCoords": Boolean,
 	},
 	"TimeStamp": String,
 	"Sensor": [{

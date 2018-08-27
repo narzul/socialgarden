@@ -13,7 +13,10 @@
         {{streams[0].Description}}
       </p>
       <br>
-      <b *ngIf="streamHeaderTxt">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}</b>
+
+      <b *ngIf="streamHeaderTxt">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
+        <p *ngIf="!IsCoordsSetManually">Coordinates has been estimated based on IP</p>
+        <p *ngIf="IsCoordsSetManually">Coordinates has been added manually</p></b>
     </div>
     <div class="stream-info" *ngIf="initiated">
       <!-- https://angular-maps.com/ -->

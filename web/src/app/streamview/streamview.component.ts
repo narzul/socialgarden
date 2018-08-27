@@ -61,7 +61,8 @@ export class StreamviewComponent implements OnInit {
     offset: 10,
     Math: Math
   };
-  pagginationPageCount:number;
+  pagginationPageCount: number;
+  IsCoordsSetManually: boolean;
   constructor(private http: HttpClient) { }
 
 
@@ -81,6 +82,9 @@ export class StreamviewComponent implements OnInit {
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
           this.streamHeaderTxt = this.streams[0].DeviceName;
+          if (this.streams[0].Location.ManuallyCoords != null) {
+            this.IsCoordsSetManually = this.streams[0].Location.ManuallyCoords;
+          }
         });
         this.initiated = true;
         resolve();
@@ -106,7 +110,7 @@ export class StreamviewComponent implements OnInit {
             const myFormattedDate = this.streams[i].createdAt;
             if (i == 0) {
               this.firstDate = new Date(myFormattedDate)
-            } else if (i == this.streams.length-1) {
+            } else if (i == this.streams.length - 1) {
               this.lastDate = new Date(myFormattedDate)
             }
 
@@ -132,7 +136,7 @@ export class StreamviewComponent implements OnInit {
   }
 
   // Populate graph sequence step 3
-  calculateDiffBetweenTwoTimeStamps(){
+  calculateDiffBetweenTwoTimeStamps() {
     //the idea is to caculate the time difference between the first and the last date. This is necessary in order to figure out which timeUnit we will you for the chart
     const start = new Date(this.firstDate).getTime();
     const end = new Date(this.lastDate).getTime();
@@ -153,7 +157,7 @@ export class StreamviewComponent implements OnInit {
       this.typeUnit = 'hour';
     }
     // less then a hour but more then a min
-    if (this.timeDiff < 3600000  && this.timeDiff >60000) {
+    if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
       this.typeUnit = 'minute';
     }
     // less then a min but more then a sec
@@ -239,7 +243,7 @@ export class StreamviewComponent implements OnInit {
 
             time: {
               unit: this.typeUnit,
-              min:new Date(this.firstDate).getTime(),
+              min: new Date(this.firstDate).getTime(),
               max: new Date(this.lastDate).getTime(),
               distribution: 'series',
               displayFormats: {

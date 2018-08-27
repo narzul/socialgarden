@@ -63,7 +63,7 @@ def insertStream(StreamName,  Description, Sensor):
     lat = str(g.lat)
     lng = str(g.lng)
     try:
-        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+' }, "Sensor" : '+Sensor+' } '
+        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+',"ManuallyCoords":false }, "Sensor" : '+Sensor+' } '
         response = requests.post(address, headers=headers, data=data)
     except ConnectionError as e:    # This is the correct syntax
         print e
@@ -74,7 +74,7 @@ def insertStreamManualCoordinates(StreamName, Description, Sensor, Lat,Lng):
         'Content-Type': 'application/json',
     }
     try:
-        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+' }, "Sensor" : '+Sensor+' } '
+        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+',"ManuallyCoords":true}, "Sensor" : '+Sensor+' } '
         response = requests.post(address, headers=headers, data=data)
     except ConnectionError as e:    # This is the correct syntax
         print e
