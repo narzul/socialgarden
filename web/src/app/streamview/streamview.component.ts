@@ -58,7 +58,7 @@ export class StreamviewComponent implements OnInit {
   pagginationManager = {
     results: [],
     page: 1,
-    offset: 20,
+    offset: 10,
     Math: Math
   };
   pagginationPageCount:number;
