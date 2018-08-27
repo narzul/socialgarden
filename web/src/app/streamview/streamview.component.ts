@@ -55,7 +55,7 @@ export class StreamviewComponent implements OnInit {
     defaultOpen: false,
   }
 
-  tableManager = {
+  pagginationManager = {
     results: [],
     page: 1,
     offset: 20,
@@ -76,8 +76,8 @@ export class StreamviewComponent implements OnInit {
 
         this.http.get('/devices/' + value).subscribe(data => {
           this.streams = data;
-          this.tableManager.results = this.streams;
-          this.pagginationPageCount = Math.ceil(this.streams.length / this.tableManager.offset);
+          this.pagginationManager.results = this.streams;
+          this.pagginationPageCount = Math.ceil(this.streams.length / this.pagginationManager.offset);
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
           this.streamHeaderTxt = this.streams[0].DeviceName;
