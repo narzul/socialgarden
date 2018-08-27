@@ -52,7 +52,7 @@
       <table class="table">
         <thead>
           <tr>
-            <th>#</th>
+            <!-- <th>#</th> -->
             <th>TimeStamp</th>
             <th class="thcent">Sensor</th>
             <th class="thcent">Value</th>
@@ -60,7 +60,7 @@
         </thead>
         <tbody>
           <tr *ngFor="let dev of pagginationManager.results.slice((pagginationManager.page - 1) * pagginationManager.offset, pagginationManager.page * pagginationManager.offset);  let i = index">
-            <td>{{(i+1)*pagginationManager.page}}</td>
+            <!-- <td>{{(i+1)}}</td> -->
             <td>{{dev.createdAt | date:"HH:mm:ss d/m/yyyy"}}</td>
             <td>
               <li *ngFor="let sens of dev.Sensor">
