@@ -77,7 +77,7 @@ export class StreamviewComponent implements OnInit {
         this.http.get('/devices/' + value).subscribe(data => {
           this.streams = data;
           this.pagginationManager.results = this.streams;
-          this.pagginationPageCount = Math.ceil(this.streams.length / this.pagginationManager.offset);
+          this.pagginationPageCount = Math.ceil(this.pagginationManager.results.length / this.pagginationManager.offset);
           this.lat = Number(this.streams[0].Location.Latitude);
           this.lng = Number(this.streams[0].Location.Longitude);
           this.streamHeaderTxt = this.streams[0].DeviceName;
