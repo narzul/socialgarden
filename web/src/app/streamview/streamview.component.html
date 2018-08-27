@@ -48,8 +48,6 @@
       <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset)">&raquo;</button>
     </div>
   </span>
-
-
     <div class="well">
       <table class="table">
         <thead>
@@ -60,9 +58,7 @@
             <th class="thcent">Value</th>
           </tr>
         </thead>
-
         <tbody>
-
           <tr *ngFor="let dev of pagginationManager.results.slice((pagginationManager.page - 1) * pagginationManager.offset, pagginationManager.page * pagginationManager.offset);  let i = index">
             <td>{{(i+1)*pagginationManager.page}}</td>
             <td>{{dev.createdAt | date:"HH:mm:ss d/m/yyyy"}}</td>
@@ -84,17 +80,15 @@
         </tbody>
       </table>
     </div>
+
     <span class="pagi-grp">
-    <div class="btn-group">
-      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = 1">&laquo;</button>
-      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = pagginationManager.page === 1 ? 1 : pagginationManager.page - 1"><</button>
-      <button class="btn btn-default" style="color: #337ab7;">{{pagginationManager.page}} / {{pagginationPageCount}}</button>
-      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset) ? pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset) : pagginationManager.page + 1">></button>
-      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset)">&raquo;</button>
-    </div>
-</span>
-
-
+      <div class="btn-group">
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = 1">&laquo;</button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = pagginationManager.page === 1 ? 1 : pagginationManager.page - 1"><</button>
+        <button class="btn btn-default" style="color: #337ab7;">{{pagginationManager.page}} / {{pagginationPageCount}}</button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset) ? pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset) : pagginationManager.page + 1">></button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset)">&raquo;</button>
+      </div>
+    </span>
   </div>
-
 </div>

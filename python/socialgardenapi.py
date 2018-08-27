@@ -5,6 +5,9 @@ import datetime
 import geocoder
 import requests
 import json
+from requests.exceptions import ConnectionError
+
+
 address = 'http://159.65.116.139:3000/devices/'
 #address = 'http://localhost:3000/devices/'
 
@@ -20,16 +23,23 @@ def getAllData(StreamName):
     headers = {
         'Accept': 'application/json',
     }
-    response = requests.get(address+StreamName.lower()+'', headers=headers)
-    return response.json()
+    try:
+        response = requests.get(address+StreamName.lower()+'', headers=headers)
+        return response.json()
+    except ConnectionError as e:    # This is the correct syntax
+        print e
+        response = "No response"
 
 def getLastData(StreamName):
     headers = {
         'Accept': 'application/json',
     }
-    response = requests.get(address+StreamName.lower()+'/one', headers=headers)
-    return response.json()
-
+    try:
+        response = requests.get(address+StreamName.lower()+'/one', headers=headers)
+        return response.json()
+    except ConnectionError as e:    # This is the correct syntax
+        print e
+        response = "No response"
 
 def getNewData(StreamName):
     lastTimeStamp = 'null'
@@ -52,18 +62,23 @@ def insertStream(StreamName,  Description, Sensor):
     g = geocoder.ip('me')
     lat = str(g.lat)
     lng = str(g.lng)
-
-    data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+' }, "Sensor" : '+Sensor+' } '
-    response = requests.post(address, headers=headers, data=data)
-
+    try:
+        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+' }, "Sensor" : '+Sensor+' } '
+        response = requests.post(address, headers=headers, data=data)
+    except ConnectionError as e:    # This is the correct syntax
+        print e
+        response = "No response"
 
 def insertStreamManualCoordinates(StreamName, Description, Sensor, Lat,Lng):
     headers = {
         'Content-Type': 'application/json',
     }
-
-    data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+' }, "Sensor" : '+Sensor+' } '
-    response = requests.post(address, headers=headers, data=data)
+    try:
+        data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+' }, "Sensor" : '+Sensor+' } '
+        response = requests.post(address, headers=headers, data=data)
+    except ConnectionError as e:    # This is the correct syntax
+        print e
+        response = "No response"
 
 def deleteStream(StreamName):
     #response = requests.delete(address+StreamName)

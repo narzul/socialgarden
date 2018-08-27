@@ -8,9 +8,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Install
 run `npm install` from commandline
 
-## Run server
+## Run on website on localhost
 
 Run `npm start` for a dev server. Navigate to `http://localhost:3000/`. The app will automatically reload if you change any of the source files.
+
+
+## Start on server via
+npm install autostart
+
+autostart check -n "Social-garden-Api" -p "/root/socialgarden/web/" -c "npm start"
 
 
 ### Further help
@@ -49,17 +55,12 @@ When using Robo3T for connecting to production server.
 ```
 setup with ssh
 ```
-### UI Sketch
-![Sketch](Sketch.png)
 
-## Start on server via
-npm install autostart
 
-autostart check -n "Social-garden-Api" -p "/root/real-live/web/" -c "npm start"
 
 
 ###### Note
-Through out the project device and stream is used to describe the same thing. In the ideal world device and DeviceName should be changed to stream and StreamName. This will take some time to do, since the attribute also has to be updated in all documents in the database. 
+Through out the project device and stream is used to describe the same thing. In the ideal world device and DeviceName should be changed to stream and StreamName. This will take some time to do, since the attribute also has to be updated in all documents in the database.
 
 ## refrences
 MEAN Stack (Angular 5) CRUD Web Application Example [MEAN tutorial](https://www.djamware.com/post/5a0673c880aca7739224ee21/mean-stack-angular-5-crud-web-application-example)
