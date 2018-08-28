@@ -1,0 +1,97 @@
+<div class="container">
+
+  <div class="navigation" *ngIf="initiated"> Select stream<br>
+    <select name="collectionSelect" [(ngModel)]="selectedColl" (ngModelChange)="onChangeSelectedStream($event)">
+      <option *ngFor="let coll of collections" [ngValue]="coll">{{coll}}</option>
+    </select>
+  </div>
+
+  <div class="info">
+    <div class="stream-info" *ngIf="initiated">
+      <h1 *ngIf="streamHeaderTxt">{{streams[0].DeviceName}}</h1>
+      <p *ngIf="streamHeaderTxt">
+        {{streams[0].Description}}
+      </p>
+      <br>
+
+      <b *ngIf="streamHeaderTxt">Stream added: UTC {{streams[0].createdAt | date:"HH:mm:ss Z dd/MM/yyyy"}}
+        <p *ngIf="!IsCoordsSetManually">Coordinates has been estimated based on IP</p>
+        <p *ngIf="IsCoordsSetManually">Coordinates has been added manually</p></b>
+    </div>
+    <div class="stream-info" *ngIf="initiated">
+      <!-- https://angular-maps.com/ -->
+      <agm-map [latitude]="lat" [longitude]="lng">
+        <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
+      </agm-map>
+    </div>
+  </div>
+
+  <div class="navigation">
+    <span class="navDates"><angular2-date-picker class="datepickers" [(ngModel)]="firstDate" (ngModelChange)="onChangeFirstDate($event)" [settings]="datepickerSettings"></angular2-date-picker></span>
+    <span class="navDates"><angular2-date-picker class="datepickers" [(ngModel)]="lastDate" (ngModelChange)="onChangeLastDate($event)"  [settings]="datepickerSettings"></angular2-date-picker></span>
+  </div>
+
+  <div class="charts">
+    <canvas id="canvas"> </canvas>
+  </div>
+
+
+
+  <button class="btn btn-primary details" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+    See detailed data
+  </button>
+
+  <div class="collapse" id="collapseExample">
+    <span class="pagi-grp">
+    <div class="btn-group">
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = 1">&laquo;</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = pagginationManager.page === 1 ? 1 : pagginationManager.page - 1"><</button>
+      <button class="btn btn-default" style="color: #337ab7;">{{pagginationManager.page}} / {{pagginationPageCount}}</button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset) ? pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset) : pagginationManager.page + 1">></button>
+      <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset)">&raquo;</button>
+    </div>
+  </span>
+    <div class="well">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>TimeStamp</th>
+            <th class="thcent">Sensor</th>
+            <th class="thcent">Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let dev of pagginationManager.results.slice((pagginationManager.page - 1) * pagginationManager.offset, pagginationManager.page * pagginationManager.offset);  let i = index">
+            <td>{{((i+1)+((pagginationManager.page-1)*10))}}</td>
+            <td>{{dev.createdAt | date:"HH:mm:ss d/m/yyyy"}}</td>
+            <td>
+              <li *ngFor="let sens of dev.Sensor">
+                <ul>
+                  {{sens.Name}}
+                </ul>
+              </li>
+            </td>
+            <td>
+              <li *ngFor="let sens of dev.Sensor">
+                <ul>
+                  {{sens.Value}}
+                </ul>
+              </li>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <span class="pagi-grp">
+      <div class="btn-group">
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = 1">&laquo;</button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page === 1" (click)="pagginationManager.page = pagginationManager.page === 1 ? 1 : pagginationManager.page - 1"><</button>
+        <button class="btn btn-default" style="color: #337ab7;">{{pagginationManager.page}} / {{pagginationPageCount}}</button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset) ? pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset) : pagginationManager.page + 1">></button>
+        <button class="btn btn-default" style="color: #337ab7;" [disabled]="pagginationManager.page >= (pagginationManager.results.length / pagginationManager.offset)" (click)="pagginationManager.page = pagginationManager.Math.ceil(pagginationManager.results.length / pagginationManager.offset)">&raquo;</button>
+      </div>
+    </span>
+  </div>
+</div>
