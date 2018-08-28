@@ -3,7 +3,7 @@ This repository contains a web service and a python API to interact with the ser
 
 Description of subsection:
 
-* [Webservice repository](https://github.com/RohlederCPH/socialgardenweb)
+* [Webservice repository](https://github.com/RohlederCPH/socialgarden/tree/master/web)
 * [Socialgarden python API repository](https://github.com/RohlederCPH/socialgardenapi)
 
 
@@ -17,4 +17,3 @@ Express.js handles the routing of the application.
 Mongoose handles the interaction with MongoDb
 
 To setup service locally. navigate to '/web' in a shell and enter 'npm start'
-
