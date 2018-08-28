@@ -3,8 +3,8 @@ This repository contains a web service and a python API to interact with the ser
 
 Description of subsection:
 
-* [Webservice repository](https://github.com/RohlederCPH/socialgarden/tree/master/web)
-* [Socialgarden python API repository](https://github.com/RohlederCPH/socialgarden/tree/master/python)
+* [Webservice repository](https://github.com/RohlederCPH/socialgardenweb)
+* [Socialgarden python API repository](https://github.com/RohlederCPH/socialgardenapi)
 
 
 ## Webserver info
