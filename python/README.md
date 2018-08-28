@@ -1,6 +1,11 @@
 # Social garden python API client
 Python version 2.7
 
+If running on computer with later version, then run by the following command in front of all calls, such as following:
+```
+Python2.7 send-to-server-example.py
+```
+
 ##### Year - 2018 IT-University of Copenhagen, Denmark
 The Social garden API is a client site tool for sending and retrieving data from the Social garden database.
 
@@ -38,7 +43,7 @@ When one wishes to work with the data, it can be done as in get-data-from-server
 ###### Now you should try the API!
 
 ## Test API
-The following test will open multiple terminal windows in order to demo their usages. 
+The following test will open multiple terminal windows in order to demo their usages.
 
 
 ```
@@ -47,11 +52,11 @@ The following test will open multiple terminal windows in order to demo their us
 
 
 ## Individual parts of the test
-in terminal 1 
+in terminal 1
 ```
 python2.7 send-to-serve-example.py
 ```
-in terminal 2 
+in terminal 2
 ```
 python2.7 get-data-from-server-example.py
 ```
@@ -170,15 +175,15 @@ curl -i -H "Accept: application/json" http://159.65.116.139:3000/devices/"Stream
 
 ###### Post data to stream
 ```
-curl -i -X POST -H "Content-Type: application/json" -d 
+curl -i -X POST -H "Content-Type: application/json" -d
 '{"DeviceName": "StreamName",
 "TimeStamp" :"datetime",
 "Description":"Description",
-"Location":{ "Latitude":lat, "Longitude":lng}, 
+"Location":{ "Latitude":lat, "Longitude":lng},
 "Sensor" :[
     {"Name":sensorName,"value":val},
     {"Name":sensorName,"value":val}
-    ]}' 
+    ]}'
 http://159.65.116.139:3000/devices/
 ```
 ###### Delete stream

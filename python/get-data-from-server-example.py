@@ -2,4 +2,4 @@ import socialgardenapi
 print('Starting listener')
 
 while True:
-    print( socialgardenapi.getNewData("myStream3") )
+    print( socialgardenapi.getNewData("testStream1") )
