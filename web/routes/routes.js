@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 var mongoose = require('mongoose');
 var Schema = require('../models/StreamSchema.js');
-var DropCol = require('../models/drop_collections.js');
+var DropCol = require('../models/DropCollections.js');
 
 router.get('/', function(req, res, next) {
-	StreamSchema = mongoose.model('devices', Schema);
+	StreamSchema = mongoose.model('routes', Schema);
 	StreamSchema.find(function(err, products) {
 		if (err) return next(err);
 		res.json(products);
@@ -41,7 +41,7 @@ router.get('/:DeviceName/:one', function(req, res, next) {
 			_id: -1
 		}).limit(1);
 	}
-	//delete collection by name of 
+	//delete collection by name of
 	if (paramTwo == "delete") {
 		mongoose.connection.collections[DeviceName].drop(function(err) {
 			console.log('collection dropped');

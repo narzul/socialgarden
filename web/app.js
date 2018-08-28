@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var morgan_logger = require('morgan');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
-var devices = require('./routes/devices');
+var routes = require('./routes/routes');
 
 var app = express();
 
@@ -26,7 +26,7 @@ app.use(bodyParser.json());
 app.use(methodOverride());
 
 app.use(express.static(path.join(__dirname, 'dist')));
-app.use('/devices', devices);
+app.use('/devices', routes);
 
 // error handler
 app.use(function(err, req, res, next) {
