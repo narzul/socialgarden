@@ -27,7 +27,7 @@ def getAllData(StreamName):
         response = requests.get(address+StreamName.lower()+'', headers=headers)
         return response.json()
     except ConnectionError as e:    # This is the correct syntax
-        print e
+        print(e)
         response = "No response"
 
 def getLastData(StreamName):
@@ -38,7 +38,7 @@ def getLastData(StreamName):
         response = requests.get(address+StreamName.lower()+'/one', headers=headers)
         return response.json()
     except ConnectionError as e:    # This is the correct syntax
-        print e
+        print(e)
         response = "No response"
 
 def getNewData(StreamName):
@@ -66,7 +66,7 @@ def insertStream(StreamName,  Description, Sensor):
         data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+lat+', "Longitude":'+lng+',"ManuallyCoords":false }, "Sensor" : '+Sensor+' } '
         response = requests.post(address, headers=headers, data=data)
     except ConnectionError as e:    # This is the correct syntax
-        print e
+        print(e)
         response = "No response"
 
 def insertStreamManualCoordinates(StreamName, Description, Sensor, Lat,Lng):
@@ -77,7 +77,7 @@ def insertStreamManualCoordinates(StreamName, Description, Sensor, Lat,Lng):
         data = '{"DeviceName": "'+StreamName.lower()+'","TimeStamp" :"'+str(datetime.datetime.utcnow())+'","Description":"'+Description+'","Location":{ "Latitude":'+Lat+', "Longitude":'+Lng+',"ManuallyCoords":true}, "Sensor" : '+Sensor+' } '
         response = requests.post(address, headers=headers, data=data)
     except ConnectionError as e:    # This is the correct syntax
-        print e
+        print(e)
         response = "No response"
 
 def deleteStream(StreamName):
