@@ -147,23 +147,23 @@ export class StreamviewComponent implements OnInit {
     // 86400000 = day
     // 3600000 = hours
     if (this.timeDiff > 604800000) { // larger then a week
-      this.typeUnit = 'week';
+      this.typeUnit = 'weeks';
     }
     //less then a week but more then a day
     if (this.timeDiff < 604800000 && this.timeDiff > 86400000) {
-      this.typeUnit = 'day';
+      this.typeUnit = 'days';
     }
     // less then a day but more then a hour
     if (this.timeDiff < 86400000 && this.timeDiff > 3600000) {
-      this.typeUnit = 'hour';
+      this.typeUnit = 'hours';
     }
     // less then a hour but more then a min
     if (this.timeDiff < 3600000 && this.timeDiff > 60000) {
-      this.typeUnit = 'minute';
+      this.typeUnit = 'minutes';
     }
     // less then a min but more then a sec
     if (this.timeDiff < 60000 && this.timeDiff > 1000) {
-      this.typeUnit = 'second';
+      this.typeUnit = 'seconds';
     }
     if (this.timeDiff < 1000) {
       this.typeUnit = 'millisecond';
