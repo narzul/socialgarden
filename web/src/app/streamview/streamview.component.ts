@@ -218,7 +218,7 @@ export class StreamviewComponent implements OnInit {
         responsive: true,
         title: {
           display: true,
-          text: 'Unit: ' + this.typeUnit,
+          text: 'x-axis: ' + this.typeUnit,
           fontFamily: 'Raleway',
         },
         events: ["mousemove", "mouseout", "click", "touchstart", "touchmove", "touchend"],
