@@ -64,7 +64,7 @@
         <tbody>
           <tr *ngFor="let dev of pagginationManager.results.slice((pagginationManager.page - 1) * pagginationManager.offset, pagginationManager.page * pagginationManager.offset);  let i = index">
             <td>{{((i+1)+((pagginationManager.page-1)*10))}}</td>
-            <td>{{dev.createdAt | date:"HH:mm:ss d/m/yyyy"}}</td>
+            <td>{{dev.createdAt | date:"HH:mm:ss d/M/yy"}}</td>
             <td>
               <li *ngFor="let sens of dev.Sensor">
                 <ul>
